@@ -4,10 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Directorio Institucional 2026 · IE Mariscal Castilla</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,900&family=Public+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/atajos/Style.css">
-
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -31,14 +28,15 @@
 <main>
 
   <!-- ===================== VISTA 1: LISTADO DE ÁREAS ===================== -->
-  <div id="vista-areas">
+  <section id="vista-areas">
     <p class="section-label" id="areas-count-label">Áreas y oficinas</p>
     <div class="grid-areas" id="grid-areas"></div>
-  </div>
+  </section>
 
   <!-- ===================== VISTA 2: PERSONAS DE UN ÁREA ===================== -->
-  <div id="vista-detalle">
+  <section id="vista-detalle">
     <button class="btn-back" onclick="mostrarVistaAreas()">← Volver a todas las áreas</button>
+
     <div class="detalle-head">
       <h2 id="detalle-titulo">Área</h2>
       <p id="detalle-descripcion"></p>
@@ -46,16 +44,19 @@
         <span>◆ <span id="total-docentes">0</span> integrantes</span>
       </div>
     </div>
+
     <div class="buscador-wrap">
       <span class="buscador-icon">⌕</span>
       <input type="text" id="input-buscador" placeholder="Buscar dentro de esta área…" oninput="filtrarDocentes()">
     </div>
+
     <div class="grid-docentes" id="grid-docentes"></div>
-  </div>
+  </section>
 
   <!-- ===================== VISTA 3: HORARIO DE ATENCIÓN DE UNA PERSONA ===================== -->
-  <div id="vista-horario">
+  <section id="vista-horario">
     <button class="btn-back" onclick="volverADetalleArea()">← Volver al área</button>
+
     <div class="detalle-head">
       <h2 id="horario-nombre">Nombre de la persona</h2>
       <p id="horario-cargo"></p>
@@ -63,12 +64,14 @@
         <span>◆ <span id="horario-area"></span></span>
       </div>
     </div>
+
     <div id="horario-contenido"></div>
-  </div>
+  </section>
 
 </main>
 
 <footer>IE Mariscal Castilla — Directorio Institucional 2026</footer>
-<script src="/atajos/Script.js"></script>
+
+<script src="directorio.js"></script>
 </body>
 </html>
