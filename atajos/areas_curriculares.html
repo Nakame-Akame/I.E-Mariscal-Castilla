@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Directorio Institucional 2026 · IE Mariscal Castilla</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,900&family=Public+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atajos/Style.css">
+
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="crest">MC</div>
+    <div class="header-text">
+      <p class="eyebrow">Directorio institucional · Año escolar 2026</p>
+      <h1>I.E. "Mariscal Castilla"</h1>
+      <p>Encuentra rápidamente a cualquier directivo, coordinador, docente o personal administrativo por área, y accede a su correo institucional.</p>
+    </div>
+  </div>
+  <div class="header-search">
+    <div class="header-search-wrap">
+      <span class="header-search-icon">⌕</span>
+      <input type="text" id="input-buscador-global" placeholder="Buscar por nombre, cargo o área…" oninput="buscarGlobal()">
+    </div>
+  </div>
+</header>
+
+<main>
+  <div id="vista-areas">
+    <p class="section-label" id="areas-count-label">Áreas y oficinas</p>
+    <div class="grid-areas" id="grid-areas"></div>
+  </div>
+
+  <div id="vista-detalle">
+    <button class="btn-back" onclick="mostrarVistaAreas()">← Volver a todas las áreas</button>
+    <div class="detalle-head">
+      <h2 id="detalle-titulo">Área</h2>
+      <p id="detalle-descripcion"></p>
+      <div class="detalle-meta">
+        <span>◆ <span id="total-docentes">0</span> integrantes</span>
+      </div>
+    </div>
+    <div class="buscador-wrap">
+      <span class="buscador-icon">⌕</span>
+      <input type="text" id="input-buscador" placeholder="Buscar dentro de esta área…" oninput="filtrarDocentes()">
+    </div>
+    <div class="grid-docentes" id="grid-docentes"></div>
+  </div>
+</main>
+
+<footer>IE Mariscal Castilla — Directorio Institucional 2026</footer>
+<script src="/atajos/Script.js"></script>
+</body>
+</html>
