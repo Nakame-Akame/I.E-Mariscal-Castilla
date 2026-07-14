@@ -570,7 +570,10 @@ footer{
   display:flex;align-items:center;justify-content:center;
   z-index:9999;transition:opacity 0.6s;flex-direction:column;gap:1.5rem;
 }
-#loader img{width:80px;height:80px;object-fit:contain;animation:spin 1s linear infinite}
-@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+#loader img{width:80px;height:80px;object-fit:contain;animation:loaderGlow 1.2s ease-in-out infinite}
+@keyframes loaderGlow{
+  0%,100%{transform:scale(0.96);filter:brightness(0.95) drop-shadow(0 0 0 rgba(255,215,0,0))}
+  50%{transform:scale(1.03);filter:brightness(1.2) drop-shadow(0 0 16px rgba(255,215,0,0.55))}
+}
 #loader p{color:var(--gold-light);font-family:var(--font-title);font-size:14px;letter-spacing:3px;text-transform:uppercase}
 #loader.hidden{opacity:0;pointer-events:none}
