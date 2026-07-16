@@ -54,6 +54,122 @@
    clases/IDs.
    ========================================================================== */
 
+/* ============================ ANIMATIONS WITH ANIME.JS ============================ */
+
+// Animación de entrada para tarjetas de áreas
+function animarTarjetasAreas() {
+  anime({
+    targets: '.card-area',
+    opacity: [0, 1],
+    translateY: [30, 0],
+    rotate: [-2, 0],
+    delay: anime.stagger(80),
+    duration: 600,
+    easing: 'easeOutCubic'
+  });
+}
+
+// Animación al cambiar de vista
+function animarCambioVista(vistaSaliente, vistaEntrante) {
+  if (!vistaSaliente) return;
+  
+  anime({
+    targets: vistaSaliente,
+    opacity: [1, 0],
+    scale: [1, 0.95],
+    duration: 350,
+    easing: 'easeInCubic',
+    complete: function() {
+      vistaSaliente.style.display = 'none';
+      vistaSaliente.style.opacity = '';
+      vistaSaliente.style.transform = '';
+    }
+  });
+  
+  anime.set(vistaEntrante, { opacity: 0, scale: 0.95 });
+  vistaEntrante.style.display = 'block';
+  anime({
+    targets: vistaEntrante,
+    opacity: [0, 1],
+    scale: [0.95, 1],
+    duration: 450,
+    easing: 'easeOutCubic',
+    complete: function() {
+      vistaEntrante.style.transform = '';
+    }
+  });
+  
+  setTimeout(() => {
+    anime({
+      targets: vistaEntrante.querySelectorAll('.card-area, .card-docente, .horario-dia'),
+      opacity: [0, 1],
+      translateY: [20, 0],
+      delay: anime.stagger(50),
+      duration: 500,
+      easing: 'easeOutCubic'
+    });
+  }, 100);
+}
+
+// Animación de tarjetas de docentes
+function animarTarjetasDocentes() {
+  anime({
+    targets: '.card-docente',
+    opacity: [0, 1],
+    scale: [0.9, 1],
+    rotate: [-1, 0],
+    delay: anime.stagger(60),
+    duration: 500,
+    easing: 'easeOutCubic'
+  });
+  
+  document.querySelectorAll('.card-docente').forEach(card => {
+    card.addEventListener('mouseenter', () => {
+      anime({
+        targets: card,
+        scale: 1.05,
+        translateY: -5,
+        duration: 300,
+        easing: 'easeOutCubic'
+      });
+    });
+    
+    card.addEventListener('mouseleave', () => {
+      anime({
+        targets: card,
+        scale: 1,
+        translateY: 0,
+        duration: 300,
+        easing: 'easeOutCubic'
+      });
+    });
+  });
+}
+
+// Animación de búsqueda/filtrado
+function animarFiltrado() {
+  anime({
+    targets: '.card-area, .card-docente',
+    opacity: [0, 1],
+    scale: [0.95, 1],
+    delay: anime.stagger(50),
+    duration: 450,
+    easing: 'easeOutCubic'
+  });
+}
+
+// Pulso sutil en tarjetas con horario
+anime({
+  targets: '.card-docente.con-horario',
+  boxShadow: [
+    '0 4px 15px rgba(0, 0, 0, 0.1)',
+    '0 8px 25px rgba(139, 0, 0, 0.2)',
+    '0 4px 15px rgba(0, 0, 0, 0.1)'
+  ],
+  duration: 2000,
+  loop: true,
+  easing: 'easeInOutQuad'
+});
 
 /* ============================ DATOS ============================ */
 
@@ -141,7 +257,15 @@ function renderizarTarjetasAreas(filtro) {
   const areas = Object.keys(directorioData);
 
   const labelEl = document.getElementById("areas-count-label");
-  if (labelEl) labelEl.textContent = `Áreas y oficinas · ${areas.length} en total`;
+  if (labelEl) {
+    anime({
+      targets: labelEl,
+      opacity: [0.5, 1],
+      duration: 400,
+      easing: 'easeOutCubic'
+    });
+    labelEl.textContent = `Áreas y oficinas · ${areas.length} en total`;
+  }
 
   const texto = filtro ? filtro.toLowerCase().trim() : "";
   let visibles = 0;
@@ -160,7 +284,15 @@ function renderizarTarjetasAreas(filtro) {
     const div = document.createElement("div");
     div.className = "card-area" + (visible ? " match" : "");
     div.dataset.area = area;
-    div.onclick = () => mostrarDetalleArea(area);
+    div.onclick = () => {
+      anime({
+        targets: div,
+        scale: [1, 0.95, 1],
+        duration: 300,
+        easing: 'easeOutCubic',
+        complete: () => mostrarDetalleArea(area)
+      });
+    };
     div.innerHTML = `
       <span class="idx">${String(i + 1).padStart(2, '0')}</span>
       <h3>${area}</h3>
@@ -171,6 +303,15 @@ function renderizarTarjetasAreas(filtro) {
 
   if (visibles === 0) {
     grid.innerHTML = `<div class="no-match">No se encontraron áreas ni personas que coincidan con "${filtro}".</div>`;
+    anime({
+      targets: '.no-match',
+      opacity: [0, 1],
+      scale: [0.9, 1],
+      duration: 400,
+      easing: 'easeOutCubic'
+    });
+  } else {
+    animarTarjetasAreas();
   }
 }
 
@@ -198,10 +339,29 @@ function mostrarVistaAreas() {
 function renderizarDocentes(lista) {
   const grid = document.getElementById("grid-docentes");
   document.getElementById("total-docentes").textContent = lista.length;
+  
+  // Animar número de docentes
+  anime({
+    targets: '#total-docentes',
+    scale: [1, 1.1, 1],
+    duration: 400,
+    easing: 'easeOutCubic'
+  });
+  
   grid.innerHTML = "";
 
   if (lista.length === 0) {
-    grid.innerHTML = `<div class="no-results">No se encontraron personas con esa búsqueda.</div>`;
+    const noResults = document.createElement('div');
+    noResults.className = 'no-results';
+    noResults.textContent = 'No se encontraron personas con esa búsqueda.';
+    grid.appendChild(noResults);
+    anime({
+      targets: noResults,
+      opacity: [0, 1],
+      scale: [0.9, 1],
+      duration: 400,
+      easing: 'easeOutCubic'
+    });
     return;
   }
 
@@ -210,7 +370,15 @@ function renderizarDocentes(lista) {
 
     const card = document.createElement("div");
     card.className = "card-docente" + (conHorario ? " con-horario" : "");
-    card.onclick = () => mostrarHorarioPersona(areaActual, doc.nombre);
+    card.onclick = () => {
+      anime({
+        targets: card,
+        scale: [1, 0.98, 1],
+        duration: 300,
+        easing: 'easeOutCubic',
+        complete: () => mostrarHorarioPersona(areaActual, doc.nombre)
+      });
+    };
 
     const htmlCargo = doc.cargo
       ? `<span class="cargo">${doc.cargo}</span>${doc.situacion ? `<span class="situacion-tag">${doc.situacion}</span>` : ''}`
@@ -243,6 +411,8 @@ function renderizarDocentes(lista) {
     `;
     grid.appendChild(card);
   });
+  
+  animarTarjetasDocentes();
 }
 
 function filtrarDocentes() {
@@ -335,11 +505,35 @@ function construirTablaHorario(titulo, datosSemana) {
 
 function cambiarVista(idVistaDestino) {
   const vistas = ["vista-areas", "vista-detalle", "vista-horario"];
+  let vistaSaliente = null;
+  let vistaEntrante = null;
+  
   vistas.forEach(id => {
     const el = document.getElementById(id);
     if (!el) return;
-    el.style.display = (id === idVistaDestino) ? "block" : "none";
+    
+    if (el.style.display !== 'none' && id !== idVistaDestino) {
+      vistaSaliente = el;
+    }
+    if (id === idVistaDestino) {
+      vistaEntrante = el;
+    }
   });
+  
+  if (vistaSaliente && vistaEntrante) {
+    animarCambioVista(vistaSaliente, vistaEntrante);
+  } else if (vistaEntrante) {
+    vistaEntrante.style.display = 'block';
+    anime({
+      targets: vistaEntrante.querySelectorAll('.card-area, .card-docente, .horario-dia'),
+      opacity: [0, 1],
+      translateY: [20, 0],
+      delay: anime.stagger(50),
+      duration: 500,
+      easing: 'easeOutCubic'
+    });
+  }
+  
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
@@ -348,3 +542,45 @@ function cambiarVista(idVistaDestino) {
 
 renderizarTarjetasAreas();
 cambiarVista("vista-areas");
+
+// Animaciones adicionales de inicialización
+document.addEventListener('DOMContentLoaded', () => {
+  // Animar el título principal
+  const titulo = document.querySelector('h1, .titulo-principal');
+  if (titulo) {
+    anime({
+      targets: titulo,
+      opacity: [0, 1],
+      translateY: [20, 0],
+      duration: 600,
+      easing: 'easeOutCubic'
+    });
+  }
+  
+  // Animar el input de búsqueda
+  const inputBuscador = document.getElementById('input-buscador-global');
+  if (inputBuscador) {
+    inputBuscador.addEventListener('focus', () => {
+      anime({
+        targets: inputBuscador,
+        scale: 1.02,
+        duration: 200,
+        easing: 'easeOutCubic'
+      });
+    });
+    
+    inputBuscador.addEventListener('blur', () => {
+      anime({
+        targets: inputBuscador,
+        scale: 1,
+        duration: 200,
+        easing: 'easeOutCubic'
+      });
+    });
+  }
+  
+  // Animar tarjetas iniciales
+  setTimeout(() => {
+    animarTarjetasAreas();
+  }, 200);
+});
