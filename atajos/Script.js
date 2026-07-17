@@ -1313,7 +1313,7 @@ const horariosAtencion = {
     },
     "Ñaupari Rafael, Juan Carlos": {
       "padres": {
-        "lunes": null,
+        "lunes": null,             
         "martes": { "hora": "5 HORA (M)", "lugar": "ELECTRICIDAD" },
         "miercoles": null,
         "jueves": null,
