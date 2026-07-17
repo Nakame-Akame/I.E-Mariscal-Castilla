@@ -1778,6 +1778,218 @@ const horariosAtencion = {
       },
     },
   },
+  "ARTE Y CULTURA": {
+    "Castro Ladera, Dina Teodora": {
+      "padres": {
+        "lunes": null,
+        "martes": { "hora": "5 HORA (M)", "lugar": "INDUSTRIAS ALIMENTARIAS" },
+        "miercoles": null,
+        "jueves": null,
+        "viernes": { "hora": "5 HORA (M)", "lugar": "INDUSTRIAS ALIMENTARIAS" },
+      },
+      "estudiantes": {
+        "lunes": {
+          "hora": "12:40-13:25",
+          "lugar": "TALLER DE INDUSTRIAS ALIMENTARIAS",
+        },
+        "martes": null,
+        "miercoles": {
+          "hora": "12:15-13:00",
+          "lugar": "TALLER DE INDUSTRIAS ALIMENTARIAS",
+        },
+        "jueves": null,
+        "viernes": null,
+      },
+    },
+    "Hurtado Soller, Jose Luis": {
+      "padres": {
+        "lunes": null,
+        "martes": { "hora": "5 HORA (M)", "lugar": "ELECTRICIDAD" },
+        "miercoles": null,
+        "jueves": null,
+        "viernes": null,
+      },
+      "estudiantes": {
+        "lunes": null,
+        "martes": { "hora": "12:40-13:25", "lugar": "TALLER DE ELECTRICIDAD" },
+        "miercoles": null,
+        "jueves": null,
+        "viernes": null,
+      },
+    },
+    "Inga Morales, Samuel Zenon": {
+      "padres": {
+        "lunes": null,
+        "martes": { "hora": "5 HORA (M)", "lugar": "ELECTRICIDAD" },
+        "miercoles": null,
+        "jueves": null,
+        "viernes": null,
+      },
+      "estudiantes": {
+        "lunes": null,
+        "martes": { "hora": "12:40-13:25", "lugar": "TALLER DE ELECTRONICA" },
+        "miercoles": null,
+        "jueves": null,
+        "viernes": null,
+      },
+    },
+    "Inga Ortiz, Daniel Armando": {
+      "padres": {
+        "lunes": { "hora": "5 HORA (M)", "lugar": "CONF. TEXTIL" },
+        "martes": null,
+        "miercoles": { "hora": "5 HORA (M)", "lugar": "CONF. TEXTIL" },
+        "jueves": null,
+        "viernes": null,
+      },
+      "estudiantes": {
+        "lunes": {
+          "hora": "12:40-13:25",
+          "lugar": "TALLER DE CONFECCION TEXTIL",
+        },
+        "martes": null,
+        "miercoles": null,
+        "jueves": null,
+        "viernes": {
+          "hora": "12:40-13:25",
+          "lugar": "TALLER DE CONFECCION TEXTIL",
+        },
+      },
+    },
+    "Limaco Basurto, Oliver": {
+      "padres": {
+        "lunes": null,
+        "martes": null,
+        "miercoles": null,
+        "jueves": { "hora": "3 HORA (T)", "lugar": "MECANICA PRODUCCION" },
+        "viernes": null,
+      },
+      "estudiantes": {
+        "lunes": null,
+        "martes": {
+          "hora": "12:40-13:25",
+          "lugar": "TALLER DE MECANICA DE PRODUC.",
+        },
+        "miercoles": null,
+        "jueves": null,
+        "viernes": null,
+      },
+    },
+    "Palomino Flores, William Alfredo": {
+      "padres": {
+        "lunes": null,
+        "martes": null,
+        "miercoles": null,
+        "jueves": { "hora": "5 HORA (T)", "lugar": "CONF. TEXTIL" },
+        "viernes": { "hora": "5 HORA (T)", "lugar": "CONF. TEXTIL" },
+      },
+      "estudiantes": {
+        "lunes": {
+          "hora": "11:30-13:00",
+          "lugar": "TALLER DE CONFECCION TEXTIL",
+        },
+        "martes": null,
+        "miercoles": null,
+        "jueves": null,
+        "viernes": null,
+      },
+    },
+    "Salvatierra Orihuela, Lila Mercedes": {
+      "padres": {
+        "lunes": null,
+        "martes": { "hora": "5 HORA (T)", "lugar": "ELECTRONICA" },
+        "miercoles": { "hora": "5 HORA (T)", "lugar": "ELECTRONICA" },
+        "jueves": null,
+        "viernes": null,
+      },
+      "estudiantes": {
+        "lunes": null,
+        "martes": null,
+        "miercoles": null,
+        "jueves": null,
+        "viernes": { "hora": "11:30-13:00", "lugar": "TALLER DE ELECTRONICA" },
+      },
+    },
+    "Lizana Martinez, Fernando": {
+      "padres": {
+        "lunes": null,
+        "martes": null,
+        "miercoles": null,
+        "jueves": { "hora": "5 HORA (T)", "lugar": "CARPINTERIA" },
+        "viernes": null,
+      },
+      "estudiantes": {
+        "lunes": null,
+        "martes": null,
+        "miercoles": null,
+        "jueves": { "hora": "12:15-13:00", "lugar": "TALLER DE ELECTRICIDAD" },
+        "viernes": null,
+      },
+    },
+    "Cerron Salvatierra, Ruben": {
+      "padres": {
+        "lunes": null,
+        "martes": null,
+        "miercoles": null,
+        "jueves": { "hora": "5 HORA (T)", "lugar": "CARPINTERIA" },
+        "viernes": null,
+      },
+      "estudiantes": {
+        "lunes": null,
+        "martes": null,
+        "miercoles": null,
+        "jueves": { "hora": "12:15-13:00", "lugar": "TALLER DE ELECTRICIDAD" },
+        "viernes": null,
+      },
+    },
+    "Gonzales Campos Luis Alfredo": {
+      "padres": {
+        "lunes": null,
+        "martes": null,
+        "miercoles": null,
+        "jueves": { "hora": "5 HORA (T)", "lugar": "CARPINTERIA" },
+        "viernes": null,
+      },
+      "estudiantes": {
+        "lunes": null,
+        "martes": null,
+        "miercoles": null,
+        "jueves": { "hora": "12:15-13:00", "lugar": "TALLER DE ELECTRICIDAD" },
+        "viernes": null,
+      },
+    },
+    "Jerónimo Mendoza Flor Judith": {
+      "padres": {
+        "lunes": null,
+        "martes": null,
+        "miercoles": null,
+        "jueves": { "hora": "5 HORA (T)", "lugar": "CARPINTERIA" },
+        "viernes": null,
+      },
+      "estudiantes": {
+        "lunes": null,
+        "martes": null,
+        "miercoles": null,
+        "jueves": { "hora": "12:15-13:00", "lugar": "TALLER DE ELECTRICIDAD" },
+        "viernes": null,
+      },
+    },
+    "Filimon Jhon Naula Ramos": {
+      "padres": {
+        "lunes": null,
+        "martes": null,
+        "miercoles": null,
+        "jueves": { "hora": "5 HORA (T)", "lugar": "CARPINTERIA" },
+        "viernes": null,
+      },
+      "estudiantes": {
+        "lunes": null,
+        "martes": null,
+        "miercoles": null,
+        "jueves": { "hora": "12:15-13:00", "lugar": "TALLER DE ELECTRICIDAD" },
+        "viernes": null,
+      },
+    },
+  },
 };
 
 const DIAS_SEMANA = [
