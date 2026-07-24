@@ -1990,6 +1990,344 @@ const horariosAtencion = {
       },
     },
   },
+  "COMUNICACION": {
+  "Zevallos Baldeon, Ruben Dario": {
+    "padres": {
+      "lunes": { "hora": "5 HORA (M)", "lugar": "107C" },
+      "martes": null,
+      "miercoles": null,
+      "jueves": null,
+      "viernes": null,
+    },
+    "estudiantes": {
+      "lunes": null,
+      "martes": null,
+      "miercoles": null,
+      "jueves": null,
+      "viernes": null,
+    },
+  },
+  "Fano Córdova, Juan": {
+    "padres": {
+      "lunes": null,
+      "martes": { "hora": "3-4 HORA (M)", "lugar": "103B" },
+      "miercoles": null,
+      "jueves": null,
+      "viernes": null,
+    },
+    "estudiantes": {
+      "lunes": null,
+      "martes": null,
+      "miercoles": null,
+      "jueves": null,
+      "viernes": null,
+    },
+  },
+  "Macha Zapaico, Edwin Lester": {
+    "padres": {
+      "lunes": null,
+      "martes": null,
+      "miercoles": null,
+      "jueves": null,
+      "viernes": { "hora": "6 HORA (T)", "lugar": "204A" },
+    },
+    "estudiantes": {
+      "lunes": null,
+      "martes": null,
+      "miercoles": null,
+      "jueves": null,
+      "viernes": null,
+    },
+  },
+  "Vargas Cervantes, Yeen": {
+    "padres": {
+      "lunes": { "hora": "3-4 HORA (M)", "lugar": "201A" },
+      "martes": null,
+      "miercoles": null,
+      "jueves": null,
+      "viernes": null,
+    },
+    "estudiantes": {
+      "lunes": null,
+      "martes": null,
+      "miercoles": null,
+      "jueves": null,
+      "viernes": null,
+    },
+  },
+  "Huaroc Taipe, Edison": {
+    "padres": {
+      "lunes": null,
+      "martes": null,
+      "miercoles": null,
+      "jueves": { "hora": "4 HORA (T)", "lugar": "301B" },
+      "viernes": null,
+    },
+    "estudiantes": {
+      "lunes": null,
+      "martes": null,
+      "miercoles": null,
+      "jueves": null,
+      "viernes": null,
+    },
+  },
+  "Barriga Palomino, Carola Yanet": {
+    "padres": {
+      "lunes": null,
+      "martes": null,
+      "miercoles": null,
+      "jueves": { "hora": "3 HORA (T)", "lugar": "105B" },
+      "viernes": null,
+    },
+    "estudiantes": {
+      "lunes": null,
+      "martes": null,
+      "miercoles": null,
+      "jueves": null,
+      "viernes": null,
+    },
+  },
+  "Cueva Haro, Cindy Hellen": {
+    "padres": {
+      "lunes": null,
+      "martes": null,
+      "miercoles": { "hora": "6-7 HORA (T)", "lugar": "103B" },
+      "jueves": null,
+      "viernes": null,
+    },
+    "estudiantes": {
+      "lunes": null,
+      "martes": null,
+      "miercoles": null,
+      "jueves": null,
+      "viernes": null,
+    },
+  },
+  "Ortiz Tito, Carmen": {
+    "padres": {
+      "lunes": null,
+      "martes": null,
+      "miercoles": null,
+      "jueves": { "hora": "7 HORA (M/T)", "lugar": "202A" }, // ESTIMACIÓN - confirmar turno
+      "viernes": { "hora": "1 HORA (M/T)", "lugar": "202A" }, // ESTIMACIÓN - confirmar turno
+    },
+    "estudiantes": {
+      "lunes": null,
+      "martes": null,
+      "miercoles": null,
+      "jueves": null,
+      "viernes": null,
+    },
+  },
+  "Moreno Vasquez, Patricia Lourdes": {
+    "padres": {
+      "lunes": null,
+      "martes": { "hora": "3 HORA (M)", "lugar": "105C" },
+      "miercoles": null,
+      "jueves": null,
+      "viernes": null,
+    },
+    "estudiantes": {
+      "lunes": null,
+      "martes": null,
+      "miercoles": null,
+      "jueves": null,
+      "viernes": null,
+    },
+  },
+  "Baquerizo Villar, Carmen Judith": {
+    "padres": {
+      "lunes": null,
+      "martes": null,
+      "miercoles": { "hora": "3 HORA (T)", "lugar": "202A" },
+      "jueves": null,
+      "viernes": null,
+    },
+    "estudiantes": {
+      "lunes": null,
+      "martes": null,
+      "miercoles": null,
+      "jueves": null,
+      "viernes": null,
+    },
+  },
+  "Villalobos Moncada, Eloy Oswaldo": {
+    "padres": {
+      "lunes": { "hora": "5 HORA (M)", "lugar": "204A" },
+      "martes": { "hora": "4 HORA (M)", "lugar": "204A" },
+      "miercoles": null,
+      "jueves": null,
+      "viernes": null,
+    },
+    "estudiantes": {
+      "lunes": null,
+      "martes": null,
+      "miercoles": null,
+      "jueves": null,
+      "viernes": null,
+    },
+  },
+  "Santiago Malpartida, Gloria María": {
+    "padres": {
+      "lunes": { "hora": "5 HORA (M)", "lugar": "105B" },
+      "martes": null,
+      "miercoles": null,
+      "jueves": { "hora": "3 HORA (M)", "lugar": "105B" },
+      "viernes": null,
+    },
+    "estudiantes": {
+      "lunes": null,
+      "martes": null,
+      "miercoles": null,
+      "jueves": null,
+      "viernes": null,
+    },
+  },
+  "Carlos Dionisio, David Stalin": {
+    "padres": {
+      "lunes": null,
+      "martes": null,
+      "miercoles": null,
+      "jueves": null,
+      "viernes": { "hora": "5 HORA (M)", "lugar": "106C" },
+    },
+    "estudiantes": {
+      "lunes": null,
+      "martes": null,
+      "miercoles": null,
+      "jueves": null,
+      "viernes": null,
+    },
+  },
+  "Rojas Orna, Jackeline Elva": {
+    "padres": {
+      "lunes": null,
+      "martes": null,
+      "miercoles": null,
+      "jueves": { "hora": "5 HORA (M)", "lugar": "104B" },
+      "viernes": null,
+    },
+    "estudiantes": {
+      "lunes": null,
+      "martes": null,
+      "miercoles": null,
+      "jueves": null,
+      "viernes": null,
+    },
+  },
+  "Cóndor Mendoza, Edgar Jaime": {
+    "padres": {
+      "lunes": null,
+      "martes": null,
+      "miercoles": null,
+      "jueves": { "hora": "4 HORA (T)", "lugar": "106C" },
+      "viernes": null,
+    },
+    "estudiantes": {
+      "lunes": null,
+      "martes": null,
+      "miercoles": null,
+      "jueves": null,
+      "viernes": null,
+    },
+  },
+  "Laureano Agüero, Lisbeth Giovanna": {
+    "padres": {
+      "lunes": null,
+      "martes": null,
+      "miercoles": { "hora": "4-5 HORA (M)", "lugar": "203A" },
+      "jueves": null,
+      "viernes": null,
+    },
+    "estudiantes": {
+      "lunes": null,
+      "martes": null,
+      "miercoles": null,
+      "jueves": null,
+      "viernes": null,
+    },
+  },
+  "Carrillo Onofre, Jeanet Angela": {
+    "padres": {
+      "lunes": null,
+      "martes": null,
+      "miercoles": { "hora": "3 HORA (T)", "lugar": "104B" },
+      "jueves": null,
+      "viernes": null,
+    },
+    "estudiantes": {
+      "lunes": null,
+      "martes": null,
+      "miercoles": null,
+      "jueves": null,
+      "viernes": null,
+    },
+  },
+  "Vilchez Gutarra, Efraín Alfredo": {
+    "padres": {
+      "lunes": null,
+      "martes": null,
+      "miercoles": { "hora": "6 HORA (T)", "lugar": "107C" },
+      "jueves": null,
+      "viernes": null,
+    },
+    "estudiantes": {
+      "lunes": null,
+      "martes": null,
+      "miercoles": null,
+      "jueves": null,
+      "viernes": null,
+    },
+  },
+  "Camarena Tueros, Enrique": {
+    "padres": {
+      "lunes": null,
+      "martes": { "hora": "3-4 HORA (T)", "lugar": "201A" },
+      "miercoles": null,
+      "jueves": null,
+      "viernes": null,
+    },
+    "estudiantes": {
+      "lunes": null,
+      "martes": null,
+      "miercoles": null,
+      "jueves": null,
+      "viernes": null,
+    },
+  },
+  "Salazar Chuquillanqui, Estephany Lisbeth": {
+    "padres": {
+      "lunes": null,
+      "martes": null,
+      "miercoles": null,
+      "jueves": null,
+      "viernes": { "hora": "3-4 HORA (T)", "lugar": "203A" },
+    },
+    "estudiantes": {
+      "lunes": null,
+      "martes": null,
+      "miercoles": null,
+      "jueves": null,
+      "viernes": null,
+    },
+  },
+  "Rojas Lope, Elisa Katherine": {
+    "padres": {
+      "lunes": { "hora": "3-4 HORA (T)", "lugar": "105C" },
+      "martes": null,
+      "miercoles": null,
+      "jueves": null,
+      "viernes": null,
+    },
+    "estudiantes": {
+      "lunes": null,
+      "martes": null,
+      "miercoles": null,
+      "jueves": null,
+      "viernes": null,
+    },
+  },
+},
 };
 
 const DIAS_SEMANA = [
