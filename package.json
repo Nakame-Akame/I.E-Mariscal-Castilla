@@ -1,5 +1,30 @@
 {
+  "name": "ie-mariscal-castilla",
+  "version": "1.0.0",
+  "description": "Sitio web oficial de la Institución Educativa Mariscal Castilla - Huancayo, Perú",
+  "main": "index.html",
+  "scripts": {
+    "dev": "http-server -p 8000 -c-1",
+    "serve": "npx http-server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "educación",
+    "colegio",
+    "Huancayo",
+    "Perú",
+    "IE Mariscal Castilla"
+  ],
+  "author": "IE Mariscal Castilla",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/usuario/I.E-Mariscal-Castilla.git"
+  },
   "dependencies": {
     "animejs": "^4.5.0"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
   }
 }

@@ -46,12 +46,29 @@ body{font-family:var(--font-body);color:var(--dark);background:var(--white);over
 .nav-brand-text .title{font-family:var(--font-title);font-size:13px;font-weight:700;color:var(--white);letter-spacing:0.5px}
 .nav-brand-text .sub{font-size:10px;color:var(--gold-light);font-weight:400;letter-spacing:1px;text-transform:uppercase}
 .nav-links{display:flex;align-items:center;gap:8px;list-style:none}
+.nav-item{position:relative}
 .nav-links a{
   color:rgba(255,255,255,0.9);font-family:var(--font-title);font-size:13px;font-weight:500;
   text-decoration:none;padding:6px 12px;border-radius:6px;
   transition:all 0.2s;letter-spacing:0.3px;
 }
 .nav-links a:hover{background:rgba(255,255,255,0.15);color:var(--white)}
+.nav-submenu{
+  position:absolute;top:calc(100% + 10px);left:0;min-width:220px;
+  list-style:none;display:flex;flex-direction:column;gap:4px;
+  background:rgba(11,31,58,0.98);backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:0.5rem;
+  box-shadow:0 10px 30px rgba(0,0,0,0.25);opacity:0;visibility:hidden;
+  transform:translateY(8px);transition:all 0.2s ease;
+}
+.nav-item:hover .nav-submenu,
+.nav-item:focus-within .nav-submenu,
+.nav-item.open .nav-submenu{opacity:1;visibility:visible;transform:translateY(0)}
+.nav-submenu a{
+  display:block;padding:10px 12px;border-radius:8px;color:rgba(255,255,255,0.9)!important;
+  background:transparent;font-size:12px;white-space:nowrap;
+}
+.nav-submenu a:hover{background:rgba(255,255,255,0.1)!important;color:var(--white)!important}
 .nav-cta{
   background:var(--red);color:var(--white)!important;
   border-radius:8px;padding:8px 18px!important;font-weight:600!important;
@@ -60,6 +77,8 @@ body{font-family:var(--font-body);color:var(--dark);background:var(--white);over
   white-space:nowrap;
 }
 .nav-cta:hover{background:var(--red-light)!important;transform:translateY(-1px);box-shadow:0 4px 15px rgba(139,0,0,0.4)!important}
+.dropdown-toggle{display:flex;align-items:center;gap:6px}
+.caret{font-size:11px;opacity:0.8}
 .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:5px}
 .hamburger span{width:24px;height:2px;background:white;transition:0.3s;display:block}
 .mobile-menu{
@@ -71,6 +90,11 @@ body{font-family:var(--font-body);color:var(--dark);background:var(--white);over
 .mobile-menu.open{display:flex}
 .mobile-menu a{color:white;text-decoration:none;padding:12px 16px;border-radius:8px;font-family:var(--font-title);font-size:14px;transition:background 0.2s}
 .mobile-menu a:hover{background:rgba(255,255,255,0.1)}
+.mobile-submenu{display:flex;flex-direction:column;gap:4px}
+.mobile-submenu-toggle{display:flex;align-items:center;justify-content:space-between}
+.mobile-submenu-list{display:none;flex-direction:column;gap:4px;padding-left:0.5rem}
+.mobile-submenu.open .mobile-submenu-list{display:flex}
+.mobile-submenu-list a{padding:10px 12px;background:rgba(255,255,255,0.04)}
 
 /* HERO */
 #hero{

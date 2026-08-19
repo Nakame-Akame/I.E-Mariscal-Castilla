@@ -1,76 +1,166 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Directorio Institucional 2026 · IE Mariscal Castilla</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,900&family=Public+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/atajos/Style.css">
-
-</head>
-<body>
-
-<header class="site-header">
-  <div class="header-inner">
-    <div class="crest">MC</div>
-    <div class="header-text">
-      <p class="eyebrow">Directorio institucional · Año escolar 2026</p>
-      <h1>I.E. "Mariscal Castilla"</h1>
-      <p>Encuentra rápidamente a cualquier directivo, coordinador, docente o personal administrativo por área, y su horario de atención.</p>
-    </div>
-    <div class="header-actions">
-      <a class="back-home-btn" href="/">← Inicio</a>
-    </div>
-  </div>
-  <div class="header-search">
-    <div class="header-search-wrap">
-      <span class="header-search-icon">⌕</span>
-      <input type="text" id="input-buscador-global" placeholder="Buscar por nombre, cargo o área…" oninput="buscarGlobal()">
-    </div>
-  </div>
-</header>
-
-<main>
-  <!-- ===================== VISTA 1: LISTADO DE ÁREAS ===================== -->
-  <div id="vista-areas">
-    <p class="section-label" id="areas-count-label">Áreas y oficinas</p>
-    <div class="grid-areas" id="grid-areas"></div>
-  </div>
-
-  <!-- ===================== VISTA 2: PERSONAS DE UN ÁREA ===================== -->
-  <div id="vista-detalle">
-    <button class="btn-back" onclick="mostrarVistaAreas()">← Volver a todas las áreas</button>
-    <div class="detalle-head">
-      <h2 id="detalle-titulo">Área</h2>
-      <p id="detalle-descripcion"></p>
-      <div class="detalle-meta">
-        <span>◆ <span id="total-docentes">0</span> integrantes</span>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Directorio Institucional 2026 · IE Mariscal Castilla</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,900&family=Public+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/atajos/Style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="header-inner">
+        <div class="crest">MC</div>
+        <div class="header-text">
+          <p class="eyebrow">Directorio institucional · Año escolar 2026</p>
+          <h1>I.E. "Mariscal Castilla"</h1>
+          <p>
+            Encuentra rápidamente a cualquier directivo, coordinador, docente o personal
+            administrativo por área, y su horario de atención.
+          </p>
+        </div>
+        <div class="header-actions">
+          <a class="back-home-btn" href="/">← Inicio</a>
+        </div>
       </div>
-    </div>
-    <div class="buscador-wrap">
-      <span class="buscador-icon">⌕</span>
-      <input type="text" id="input-buscador" placeholder="Buscar dentro de esta área…" oninput="filtrarDocentes()">
-    </div>
-    <div class="grid-docentes" id="grid-docentes"></div>
-  </div>
-
-  <!-- ===================== VISTA 3: HORARIO DE ATENCIÓN DE UNA PERSONA ===================== -->
-  <div id="vista-horario">
-    <button class="btn-back" onclick="volverADetalleArea()">← Volver al área</button>
-    <div class="detalle-head">
-      <h2 id="horario-nombre">Nombre de la persona</h2>
-      <p id="horario-cargo"></p>
-      <div class="detalle-meta">
-        <span>◆ <span id="horario-area"></span></span>
+      <div class="header-search">
+        <div class="header-search-wrap">
+          <span class="header-search-icon">⌕</span>
+          <input
+            type="text"
+            id="input-buscador-global"
+            placeholder="Buscar por nombre, cargo o área…"
+            oninput="buscarGlobal()"
+          />
+        </div>
       </div>
-    </div>
-    <div id="horario-contenido"></div>
-  </div>
+    </header>
 
-</main>
+    <main>
+      <!-- ===================== VISTA 1: LISTADO DE ÁREAS ===================== -->
+      <div id="vista-areas">
+        <p class="section-label" id="areas-count-label">Áreas y oficinas</p>
 
-<footer>IE Mariscal Castilla — Directorio Institucional 2026</footer>
-<script src="/atajos/Script.js"></script>
-</body>
+        <div class="categoria-bloque">
+          <button
+            class="categoria-header abierto"
+            id="header-gestion-institucional"
+            onclick="toggleCategoria('gestion-institucional')"
+          >
+            <span class="categoria-titulo"
+              >🏛️ Gestión Institucional
+              <span id="count-gestion-institucional" class="categoria-badge"></span
+            ></span>
+            <span class="categoria-flecha" id="flecha-gestion-institucional">▾</span>
+          </button>
+          <div class="gestion-inst-container" id="gestion-inst-container">
+            <!-- Submenú: Directivos Jerárquicos -->
+            <div class="subcategoria-bloque">
+              <button
+                class="subcategoria-header abierto"
+                id="subheader-directivos"
+                onclick="toggleSubcategoria('directivos')"
+              >
+                <span class="subcategoria-titulo"
+                  >👔 Directivos Jerárquicos
+                  <span id="count-directivos" class="subcategoria-badge"></span
+                ></span>
+                <span class="subcategoria-flecha" id="flecha-directivos">▾</span>
+              </button>
+              <div class="grid-areas" id="grid-directivos"></div>
+            </div>
+
+            <!-- Submenú: Gestión Pedagógica -->
+            <div class="subcategoria-bloque">
+              <button
+                class="subcategoria-header abierto"
+                id="subheader-pedagogica"
+                onclick="toggleSubcategoria('pedagogica')"
+              >
+                <span class="subcategoria-titulo"
+                  >📖 Gestión Pedagógica
+                  <span id="count-pedagogica" class="subcategoria-badge"></span
+                ></span>
+                <span class="subcategoria-flecha" id="flecha-pedagogica">▾</span>
+              </button>
+              <div class="grid-areas" id="grid-pedagogica"></div>
+            </div>
+
+            <!-- Submenú: Áreas Curriculares -->
+            <div class="subcategoria-bloque">
+              <button
+                class="subcategoria-header abierto"
+                id="subheader-areas"
+                onclick="toggleSubcategoria('areas')"
+              >
+                <span class="subcategoria-titulo"
+                  >📚 Áreas Curriculares <span id="count-areas" class="subcategoria-badge"></span
+                ></span>
+                <span class="subcategoria-flecha" id="flecha-areas">▾</span>
+              </button>
+              <div class="grid-areas" id="grid-areas"></div>
+            </div>
+
+            <!-- Submenú: Gestión Administrativa -->
+            <div class="subcategoria-bloque">
+              <button
+                class="subcategoria-header abierto"
+                id="subheader-administrativa"
+                onclick="toggleSubcategoria('administrativa')"
+              >
+                <span class="subcategoria-titulo"
+                  >🗂️ Gestión Administrativa
+                  <span id="count-administrativa" class="subcategoria-badge"></span
+                ></span>
+                <span class="subcategoria-flecha" id="flecha-administrativa">▾</span>
+              </button>
+              <div class="grid-areas" id="grid-administrativa"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== VISTA 2: PERSONAS DE UN ÁREA ===================== -->
+      <div id="vista-detalle">
+        <button class="btn-back" onclick="mostrarVistaAreas()">← Volver a todas las áreas</button>
+        <div class="detalle-head">
+          <h2 id="detalle-titulo">Área</h2>
+          <p id="detalle-descripcion"></p>
+          <div class="detalle-meta">
+            <span>◆ <span id="total-docentes">0</span> integrantes</span>
+          </div>
+        </div>
+        <div class="buscador-wrap">
+          <span class="buscador-icon">⌕</span>
+          <input
+            type="text"
+            id="input-buscador"
+            placeholder="Buscar dentro de esta área…"
+            oninput="filtrarDocentes()"
+          />
+        </div>
+        <div class="grid-docentes" id="grid-docentes"></div>
+      </div>
+
+      <!-- ===================== VISTA 3: HORARIO DE ATENCIÓN DE UNA PERSONA ===================== -->
+      <div id="vista-horario">
+        <button class="btn-back" onclick="volverADetalleArea()">← Volver al área</button>
+        <div class="detalle-head">
+          <h2 id="horario-nombre">Nombre de la persona</h2>
+          <p id="horario-cargo"></p>
+          <div class="detalle-meta">
+            <span>◆ <span id="horario-area"></span></span>
+          </div>
+        </div>
+        <div id="horario-contenido"></div>
+      </div>
+    </main>
+
+    <footer>IE Mariscal Castilla — Directorio Institucional 2026</footer>
+    <script src="/atajos/Script.js"></script>
+  </body>
 </html>

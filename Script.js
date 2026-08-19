@@ -26,6 +26,26 @@ function toggleMenu() {
   menu.classList.toggle('open');
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.has-submenu').forEach(item => {
+    const link = item.querySelector('.dropdown-toggle');
+    if (link) {
+      link.addEventListener('click', (event) => {
+        if (window.innerWidth <= 900) {
+          event.preventDefault();
+          item.classList.toggle('open');
+        }
+      });
+    }
+  });
+
+  document.addEventListener('click', (event) => {
+    if (!event.target.closest('.has-submenu')) {
+      document.querySelectorAll('.has-submenu').forEach(item => item.classList.remove('open'));
+    }
+  });
+});
+
 // HERO SLIDER
 let currentSlide = 0;
 const slides = document.querySelectorAll('.hero-slide');
@@ -107,13 +127,13 @@ window.addEventListener('load', () => {
     document.getElementById('loader').classList.add('hidden');
     setTimeout(() => document.getElementById('loader').remove(), 600);
   }, 1200);
-  
+
   document.querySelectorAll('[data-target]').forEach(el => {
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => { if(entry.isIntersecting) animateCounter(el); });
     }, {threshold:0.5});
     observer.observe(el);
   });
-  
+
   revealOnScroll();
 });q
