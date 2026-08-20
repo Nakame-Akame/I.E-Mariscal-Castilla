@@ -297,10 +297,6 @@ main {
   pointer-events: none;
 }
 
-.card-area:not(.match) {
-  display: none;
-}
-
 .card-area:hover {
   transform: translateY(-6px);
   box-shadow: 0 12px 28px rgba(19, 40, 72, 0.18);
@@ -861,6 +857,11 @@ footer {
   border-left-color: var(--gold);
   background: linear-gradient(135deg, rgba(199, 154, 60, 0.04) 0%, rgba(244, 239, 227, 0.6) 100%);
   box-shadow: 0 2px 8px rgba(199, 154, 60, 0.1);
+}
+
+.subcategoria-bloque.seleccionada {
+  border-left-color: var(--navy-deep);
+  box-shadow: 0 4px 14px rgba(19, 40, 72, 0.14);
 }
 
 .subcategoria-header {

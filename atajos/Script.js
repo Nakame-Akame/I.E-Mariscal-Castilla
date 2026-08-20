@@ -4213,12 +4213,14 @@ function renderizarTarjetasAreas(filtro) {
   });
 
   // Actualizar conteos de Gestión Institucional
-  document.getElementById('count-directivos').textContent = `(${totalesInst.directivos})`;
-  document.getElementById('count-pedagogica').textContent = `(${totalesInst.pedagogica})`;
-  document.getElementById('count-areas').textContent = `(${totalesInst.areas})`;
-  document.getElementById('count-administrativa').textContent = `(${totalesInst.administrativa})`;
-  document.getElementById('count-gestion-institucional').textContent =
-    `(${totalesInst.directivos + totalesInst.pedagogica + totalesInst.areas + totalesInst.administrativa})`;
+  const actualizarContador = (id, total) => {
+    const elemento = document.getElementById(id);
+    if (elemento) elemento.textContent = `(${total})`;
+  };
+  actualizarContador('count-directivos', totalesInst.directivos);
+  actualizarContador('count-pedagogica', totalesInst.pedagogica);
+  actualizarContador('count-areas', totalesInst.areas);
+  actualizarContador('count-administrativa', totalesInst.administrativa);
 
   // Mostrar mensajes "Sin coincidencias"
   if (matchesInst.directivos === 0) {
@@ -4288,6 +4290,40 @@ function abrirSubcategoria(nombre, abrir) {
   if (grid) grid.style.display = abrir ? 'grid' : 'none';
   if (flecha) flecha.textContent = abrir ? '▾' : '▸';
   if (header) header.classList.toggle('abierto', abrir);
+}
+
+function seleccionarSubcategoria(nombre, desplazar = true) {
+  const nombres = ['directivos', 'pedagogica', 'areas', 'administrativa'];
+  if (!nombres.includes(nombre)) return;
+
+  nombres.forEach((item) => abrirSubcategoria(item, item === nombre));
+
+  const bloque = document.getElementById(`grid-${nombre}`)?.closest('.subcategoria-bloque');
+  document.querySelectorAll('.subcategoria-bloque').forEach((item) => {
+    item.style.display = item === bloque ? '' : 'none';
+    item.classList.toggle('seleccionada', item === bloque);
+  });
+
+  if (desplazar && bloque) {
+    window.requestAnimationFrame(() =>
+      bloque.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    );
+  }
+}
+
+function seleccionarSubcategoriaDesdeHash(desplazar = true) {
+  const nombre = window.location.hash.replace('#grid-', '');
+  const nombres = ['directivos', 'pedagogica', 'areas', 'administrativa'];
+
+  if (nombres.includes(nombre)) {
+    seleccionarSubcategoria(nombre, desplazar);
+    return;
+  }
+
+  document.querySelectorAll('.subcategoria-bloque').forEach((item) => {
+    item.style.display = '';
+    item.classList.remove('seleccionada');
+  });
 }
 
 function buscarGlobal() {
@@ -4462,3 +4498,5 @@ function cambiarVista(idVistaDestino) {
 
 renderizarTarjetasAreas();
 cambiarVista('vista-areas');
+window.addEventListener('hashchange', () => seleccionarSubcategoriaDesdeHash());
+seleccionarSubcategoriaDesdeHash(false);
