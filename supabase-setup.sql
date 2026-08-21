@@ -24,7 +24,14 @@ create policy "Estudiantes autenticados consultan contenido privado"
 on public.contenido_restringido
 for select
 to authenticated
-using (true);
+using (
+  exists (
+    select 1
+    from public.estudiantes
+    where lower(estudiantes.email) = lower((select auth.jwt() ->> 'email'))
+      and estudiantes.activo = true
+  )
+);
 
 -- Verificacion opcional de la politica:
 -- El estudiante autenticado solo deberia recibir su propia fila.

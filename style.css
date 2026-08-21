@@ -5,6 +5,9 @@
   margin: 0;
   padding: 0;
 }
+[hidden] {
+  display: none !important;
+}
 :root {
   --red: #8b0000;
   --red-light: #b22222;
