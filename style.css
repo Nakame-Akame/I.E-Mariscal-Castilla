@@ -5,6 +5,9 @@
   margin: 0;
   padding: 0;
 }
+[hidden] {
+  display: none !important;
+}
 :root {
   --red: #8b0000;
   --red-light: #b22222;
@@ -1621,6 +1624,260 @@ footer {
     bottom: 1rem;
     right: 1rem;
     font-size: 22px;
+  }
+}
+
+@media (max-width: 768px) {
+  .secondary-offer {
+    padding: 3.5rem 1rem !important;
+  }
+  .secondary-offer .section-header {
+    margin-bottom: 2rem !important;
+  }
+  .secondary-offer .section-title {
+    font-size: clamp(1.8rem, 8vw, 2.5rem);
+  }
+  .secondary-offer .section-desc {
+    max-width: 34rem;
+  }
+  .secondary-offer-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+  .secondary-offer-grid .value-card {
+    width: 100%;
+    padding: 1.25rem 1rem !important;
+  }
+  .secondary-offer-grid .value-card > div {
+    font-size: 2rem !important;
+  }
+  .secondary-offer-grid .value-card p {
+    max-width: 24rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .secondary-offer > .container > div:last-child a {
+    width: 100%;
+    max-width: 22rem;
+  }
+}
+
+/* MOBILE LAYOUT SAFETY */
+@media (max-width: 768px) {
+  html,
+  body {
+    width: 100%;
+    overflow-x: hidden;
+  }
+  #navbar {
+    width: 100%;
+  }
+  .nav-brand {
+    min-width: 0;
+    max-width: calc(100% - 48px);
+  }
+  .nav-brand-text {
+    min-width: 0;
+  }
+  .nav-brand-text .title,
+  .nav-brand-text .sub {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .mobile-menu {
+    max-height: calc(100vh - 60px);
+    overflow-y: auto;
+  }
+  .hero-content {
+    width: 100%;
+    max-width: 100%;
+    padding: 1.25rem;
+  }
+  .hero-title,
+  .section-title {
+    overflow-wrap: anywhere;
+  }
+  .stats-bar,
+  .stat-item {
+    width: 100%;
+  }
+  .about-grid,
+  .niveles-grid,
+  .infra-grid,
+  .areas-grid,
+  .noticias-grid,
+  .values-grid,
+  .contacto-grid,
+  .footer-grid {
+    grid-template-columns: 1fr;
+  }
+  .galeria-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: none;
+    grid-auto-rows: 190px;
+  }
+  .galeria-item,
+  .galeria-item:nth-child(n) {
+    grid-column: auto;
+    grid-row: auto;
+  }
+  .about-img-badge {
+    right: 0.5rem;
+    bottom: -1rem;
+  }
+  .contacto-item,
+  .form-group,
+  .form-row,
+  .footer-brand,
+  .footer-col {
+    min-width: 0;
+  }
+  .contacto-item p,
+  .contacto-item a,
+  .footer-brand p,
+  .footer-col a {
+    overflow-wrap: anywhere;
+  }
+  .testimonios-wrapper {
+    width: 100%;
+  }
+  .testimonios-track {
+    gap: 0.75rem;
+  }
+  .testimonio-card {
+    min-width: 100%;
+    width: 100%;
+    padding: 1.25rem;
+  }
+  .modal,
+  .login-modal,
+  .docentes-modal {
+    width: calc(100% - 2rem);
+    max-width: calc(100% - 2rem);
+  }
+  .table-responsive,
+  table {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-logo {
+    width: 40px;
+    height: 40px;
+  }
+  .nav-brand {
+    gap: 8px;
+  }
+  .hamburger {
+    flex-shrink: 0;
+  }
+  .hero-title {
+    font-size: clamp(1.75rem, 9vw, 2.35rem);
+  }
+  .hero-badge {
+    max-width: 100%;
+    letter-spacing: 1.5px;
+  }
+  .section-title {
+    font-size: 1.65rem;
+  }
+  .section-desc {
+    font-size: 0.9rem;
+  }
+  .loader-copy h1 {
+    font-size: 1.1rem;
+    letter-spacing: 0.14em;
+  }
+  .loader-motto {
+    font-size: 0.68rem;
+  }
+  .loader-emblem {
+    transform: scale(0.88);
+    margin-bottom: 1rem;
+  }
+  .loader-progress {
+    margin-top: 2rem;
+  }
+}
+
+/* ADMISSION PAGE ON SMALL SCREENS */
+@media (max-width: 768px) {
+  #page-admision .subpage-hero {
+    padding: 104px 1rem 2.75rem;
+  }
+  #page-admision .subpage-hero h1 {
+    font-size: clamp(1.8rem, 8vw, 2.5rem);
+    line-height: 1.15;
+    overflow-wrap: anywhere;
+  }
+  #page-admision .subpage-hero p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+  #page-admision > section {
+    padding: 2.75rem 1rem !important;
+  }
+  #page-admision > section .section-header {
+    margin-bottom: 1rem;
+  }
+  #page-admision > section .container > div[style*='grid-template-columns: repeat(2'] {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+    margin-top: 1.25rem !important;
+  }
+  #page-admision > section .container > div[style*='grid-template-columns: repeat(2'] > div {
+    padding: 1.25rem !important;
+  }
+  #page-admision > section .container > div[style*='grid-template-columns: repeat(3'] {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+    margin-top: 1.25rem !important;
+  }
+  #page-admision > section .container > div[style*='grid-template-columns: repeat(3'] > div {
+    padding: 1rem !important;
+  }
+  #page-admision > section .container > div[style*='background: var(--navy)'] {
+    padding: 1.5rem 1rem !important;
+    margin-top: 2rem !important;
+    border-radius: 14px !important;
+  }
+  #page-admision > section .container > div[style*='background: var(--navy)'] h3 {
+    font-size: 1.45rem !important;
+    line-height: 1.25;
+  }
+  #page-admision > section .container > div:last-child {
+    padding: 1.5rem 1rem !important;
+    margin-top: 2rem !important;
+    border-radius: 14px !important;
+  }
+  #page-admision > section .container > div:last-child > div {
+    grid-template-columns: 1fr !important;
+    gap: 0.85rem !important;
+    margin-top: 1.25rem !important;
+  }
+  #page-admision > section .container > div:last-child > div > div {
+    width: 100%;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+  #page-admision > section .container > div:last-child li {
+    overflow-wrap: anywhere;
+    line-height: 1.7 !important;
+  }
+  #page-admision > section .container > div:last-child a {
+    display: block;
+    width: 100%;
+    max-width: 360px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  #page-admision .btn {
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    padding: 13px 18px !important;
   }
 }
 
