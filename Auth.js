@@ -69,7 +69,20 @@ async function iniciarSesionEstudiante(event) {
   boton.disabled = false;
 
   if (error) {
-    mostrarEstadoLogin('Correo o contraseña incorrectos.', 'error');
+    const mensaje = error.message?.toLowerCase() || '';
+    if (mensaje.includes('email not confirmed')) {
+      mostrarEstadoLogin('Confirma primero el correo en Supabase Authentication.', 'error');
+    } else if (mensaje.includes('invalid login credentials')) {
+      mostrarEstadoLogin(
+        'El correo no existe en Authentication o la contraseña no coincide.',
+        'error'
+      );
+    } else {
+      mostrarEstadoLogin(
+        'No se pudo iniciar sesión. Revisa la configuración de Supabase.',
+        'error'
+      );
+    }
     return;
   }
 
@@ -96,7 +109,7 @@ async function cerrarSesionEstudiante() {
 async function cargarPerfilEstudiante(correo) {
   const { data, error } = await supabaseClient
     .from('estudiantes')
-    .select('id, dni, apellidos, nombres, seccion, email, activo')
+    .select('uuid, dni, apellidos, nombres, seccion, email, activo')
     .eq('email', correo)
     .eq('activo', true)
     .maybeSingle();
@@ -179,6 +192,14 @@ function actualizarSesionEstudiante(session, perfil = estudiantePerfil) {
   const usuario = document.getElementById('student-user-email');
   const saludo = document.getElementById('student-greeting');
   const botonSesion = document.getElementById('student-session-action');
+  const accesoAreas = document.getElementById('areas-curriculares-nav');
+  const accesoAreasMovil = document.getElementById('areas-curriculares-nav-mobile');
+  const accesoAreasFooter = document.getElementById('areas-curriculares-footer');
+  const estudianteAutorizado = Boolean(session?.user && perfil);
+
+  [accesoAreas, accesoAreasMovil, accesoAreasFooter].forEach((elemento) => {
+    if (elemento) elemento.hidden = !estudianteAutorizado;
+  });
 
   if (session?.user) {
     if (acceso) acceso.textContent = 'Mi área';
@@ -235,5 +256,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (estudianteSession?.user) cerrarSesionEstudiante();
     else mostrarLogin();
   });
+  if (window.location.hash === '#login') mostrarLogin();
   inicializarAutenticacion();
 });

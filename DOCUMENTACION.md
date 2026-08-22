@@ -172,6 +172,18 @@ La carga de horarios es parcial. El código documenta información para EPT, Edu
 - Filtrado global que abre categorías con coincidencias.
 - Estilos propios para subcategorías, tarjetas y estados sin resultados.
 
+### Acceso estudiantil y contenido restringido
+
+- Integración inicial con Supabase Auth mediante `Auth.js`.
+- Inicio de sesión con correo institucional y contraseña.
+- Validación del estudiante contra la tabla `estudiantes` y el campo `activo`.
+- Restauración y cierre de sesión.
+- Vista privada `page-estudiante` para contenido destinado a estudiantes.
+- Protección del bloque y de los accesos de navegación de Áreas Curriculares.
+- Las áreas curriculares solo se muestran cuando existe una sesión de estudiante autorizado.
+- Configuración pública de Supabase centralizada en `supabase-config.js`.
+- Políticas RLS iniciales documentadas en `supabase-setup.sql`.
+
 ## 8. Estado actual y pendientes
 
 ### Implementado
@@ -183,9 +195,10 @@ La carga de horarios es parcial. El código documenta información para EPT, Edu
 - Diseño responsive.
 - Horarios individuales con cobertura parcial.
 - Documentación base del proyecto.
-- Login inicial con Supabase Auth y vista privada del estudiante.
-- Acceso limitado al dominio de correo institucional.
+- Login con Supabase Auth y vista privada del estudiante.
+- Acceso limitado al dominio de correo institucional y a estudiantes activos.
 - Cierre y restauración de sesión.
+- Protección de Áreas Curriculares para estudiantes autenticados.
 
 ### Pendiente o recomendable
 
@@ -201,10 +214,9 @@ La carga de horarios es parcial. El código documenta información para EPT, Edu
 - Crear pruebas automatizadas; `npm test` todavía es un placeholder que termina con error.
 - Validar HTML, CSS, consola y responsive en navegadores reales.
 - Revisar accesibilidad de controles que dependen de `onclick` y elementos visuales.
-- Configurar `supabase-config.js` con la URL y la clave pública `anon`.
 - Crear o invitar usuarios en Supabase Auth; no existe registro público desde la web.
 - Confirmar las columnas de `estudiantes` para mostrar DNI, notas y horarios reales.
-- Crear políticas RLS para que cada estudiante solo pueda leer sus propios datos.
+- Completar las políticas RLS para que cada estudiante solo pueda leer sus propios datos académicos.
 
 ## 9. Mantenimiento del directorio
 
@@ -220,13 +232,14 @@ La autenticación inicial está implementada en `Auth.js` y utiliza Supabase Aut
 
 ### Flujo actual
 
-1. El visitante ve normalmente todo el contenido público.
+1. El visitante ve normalmente el contenido público; los accesos a Áreas Curriculares permanecen ocultos.
 2. Al pulsar `Acceso estudiante`, aparece el formulario de login.
 3. El correo debe terminar en `@mariscalcastilla.edu.pe`.
 4. Supabase valida el correo y la contraseña mediante `signInWithPassword()`.
-5. Con sesión válida se habilita `page-estudiante`.
-6. La vista muestra las áreas privadas previstas: datos personales, notas y horario.
-7. El cierre de sesión elimina la sesión y devuelve al inicio.
+5. El sistema busca el correo en `estudiantes` y exige `activo = true`.
+6. Con sesión válida se habilita `page-estudiante` y el acceso a Áreas Curriculares.
+7. La vista muestra las áreas privadas previstas: datos personales, notas y horario.
+8. El cierre de sesión elimina la sesión y oculta nuevamente los accesos restringidos.
 
 ### Configuración requerida
 

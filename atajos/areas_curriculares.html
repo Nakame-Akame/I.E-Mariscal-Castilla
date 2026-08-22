@@ -85,7 +85,10 @@
             </div>
 
             <!-- Submenú: Áreas Curriculares -->
-            <div class="subcategoria-bloque">
+            <div
+              class="subcategoria-bloque areas-curriculares-restringidas"
+              id="subcategoria-areas"
+            >
               <button
                 class="subcategoria-header abierto"
                 id="subheader-areas"
@@ -97,6 +100,10 @@
                 <span class="subcategoria-flecha" id="flecha-areas">▾</span>
               </button>
               <div class="grid-areas" id="grid-areas"></div>
+              <div class="areas-login-required" id="areas-login-required" hidden>
+                <p>Inicia sesión como estudiante para consultar las áreas curriculares.</p>
+                <button type="button" id="areas-login-button">Iniciar sesión</button>
+              </div>
             </div>
 
             <!-- Submenú: Gestión Administrativa -->
@@ -155,6 +162,9 @@
     </main>
 
     <footer>IE Mariscal Castilla — Directorio Institucional 2026</footer>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../supabase-config.js"></script>
     <script src="Script.js"></script>
+    <script src="areas-auth.js"></script>
   </body>
 </html>
