@@ -2,6 +2,10 @@
 -- Este archivo no crea usuarios ni almacena contrasenas.
 -- Los usuarios deben existir previamente en Authentication > Users.
 
+update public.estudiantes
+set email = lower(trim(email))
+where email is not null;
+
 alter table public.estudiantes enable row level security;
 
 drop policy if exists "Estudiante consulta su propio registro" on public.estudiantes;
@@ -11,7 +15,7 @@ on public.estudiantes
 for select
 to authenticated
 using (
-  lower(email) = lower((select auth.jwt() ->> 'email'))
+  lower(trim(email)) = lower(trim((select auth.jwt() ->> 'email')))
   and activo = true
 );
 
@@ -28,7 +32,7 @@ using (
   exists (
     select 1
     from public.estudiantes
-    where lower(estudiantes.email) = lower((select auth.jwt() ->> 'email'))
+    where lower(trim(estudiantes.email)) = lower(trim((select auth.jwt() ->> 'email')))
       and estudiantes.activo = true
   )
 );

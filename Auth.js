@@ -37,8 +37,16 @@ function mostrarEstadoLogin(mensaje, tipo = '') {
 }
 
 function esCorreoInstitucional(correo) {
-  const dominio = window.SUPABASE_CONFIG?.institutionalEmailDomain;
-  return Boolean(dominio && correo.toLowerCase().endsWith(`@${dominio}`));
+  const config = window.SUPABASE_CONFIG;
+  const correoNormalizado = correo.trim().toLowerCase();
+  const dominio = config?.institutionalEmailDomain;
+  const correosDePrueba = (config?.allowedTestEmails || []).map((email) =>
+    email.trim().toLowerCase()
+  );
+  return Boolean(
+    (dominio && correoNormalizado.endsWith(`@${dominio}`)) ||
+    correosDePrueba.includes(correoNormalizado)
+  );
 }
 
 async function iniciarSesionEstudiante(event) {
@@ -49,7 +57,7 @@ async function iniciarSesionEstudiante(event) {
   const boton = formulario.querySelector('button[type="submit"]');
 
   if (!esCorreoInstitucional(correo)) {
-    mostrarEstadoLogin('Usa tu correo institucional.', 'error');
+    mostrarEstadoLogin('Usa tu correo institucional o el correo de prueba autorizado.', 'error');
     return;
   }
 
@@ -70,6 +78,7 @@ async function iniciarSesionEstudiante(event) {
 
   if (error) {
     const mensaje = error.message?.toLowerCase() || '';
+    console.error('Error de inicio de sesión en Supabase:', error);
     if (mensaje.includes('email not confirmed')) {
       mostrarEstadoLogin('Confirma primero el correo en Supabase Authentication.', 'error');
     } else if (mensaje.includes('invalid login credentials')) {
@@ -77,9 +86,29 @@ async function iniciarSesionEstudiante(event) {
         'El correo no existe en Authentication o la contraseña no coincide.',
         'error'
       );
+    } else if (mensaje.includes('email logins are disabled')) {
+      mostrarEstadoLogin(
+        'El acceso por correo está desactivado en Supabase Authentication.',
+        'error'
+      );
+    } else if (mensaje.includes('rate limit')) {
+      mostrarEstadoLogin(
+        'Se alcanzó el límite de intentos. Espera unos minutos y vuelve a intentar.',
+        'error'
+      );
+    } else if (mensaje.includes('failed to fetch')) {
+      mostrarEstadoLogin(
+        'No se pudo contactar con Supabase. Revisa tu conexión a Internet.',
+        'error'
+      );
+    } else if (mensaje.includes('captcha')) {
+      mostrarEstadoLogin(
+        'La protección CAPTCHA está activa en Supabase, pero este formulario no tiene CAPTCHA configurado. Desactívala en Authentication > Protection.',
+        'error'
+      );
     } else {
       mostrarEstadoLogin(
-        'No se pudo iniciar sesión. Revisa la configuración de Supabase.',
+        `Supabase rechazó el acceso: ${error.message || 'error desconocido'}`,
         'error'
       );
     }
@@ -90,7 +119,10 @@ async function iniciarSesionEstudiante(event) {
 
   if (!perfil) {
     await supabaseClient.auth.signOut();
-    mostrarEstadoLogin('Tu correo no está habilitado en el padrón estudiantil.', 'error');
+    mostrarEstadoLogin(
+      `El correo ${data.session.user.email} inició sesión, pero no tiene un registro activo en la tabla estudiantes.`,
+      'error'
+    );
     return;
   }
 
@@ -109,13 +141,17 @@ async function cerrarSesionEstudiante() {
 async function cargarPerfilEstudiante(correo) {
   const { data, error } = await supabaseClient
     .from('estudiantes')
-    .select('uuid, dni, apellidos, nombres, seccion, email, activo')
-    .eq('email', correo)
+    .select('id, dni, apellidos, nombres, seccion, email, activo')
+    .ilike('email', correo.trim())
     .eq('activo', true)
     .maybeSingle();
 
   if (error) {
     console.error('No se pudo consultar el perfil del estudiante:', error);
+    mostrarEstadoLogin(
+      'No se pudo verificar el registro estudiantil. Revisa las políticas RLS.',
+      'error'
+    );
     return null;
   }
 

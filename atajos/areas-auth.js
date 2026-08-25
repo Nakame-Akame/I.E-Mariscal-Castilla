@@ -46,8 +46,8 @@ async function iniciarGuardAreas() {
 async function obtenerPerfilEstudiante(cliente, correo) {
   const { data } = await cliente
     .from('estudiantes')
-    .select('uuid')
-    .eq('email', correo)
+    .select('id')
+    .ilike('email', correo.trim())
     .eq('activo', true)
     .maybeSingle();
   return data;
