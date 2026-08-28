@@ -176,7 +176,7 @@ La carga de horarios es parcial. El código documenta información para EPT, Edu
 
 - Integración inicial con Supabase Auth mediante `Auth.js`.
 - Inicio de sesión con correo institucional y contraseña.
-- Validación del estudiante contra la tabla `estudiantes` y el campo `activo`.
+- Validación de cualquier cuenta institucional creada en Supabase Auth; el perfil de `estudiantes` es opcional.
 - Restauración y cierre de sesión.
 - Vista privada `page-estudiante` para contenido destinado a estudiantes.
 - Protección del bloque y de los accesos de navegación de Áreas Curriculares.
@@ -196,7 +196,7 @@ La carga de horarios es parcial. El código documenta información para EPT, Edu
 - Horarios individuales con cobertura parcial.
 - Documentación base del proyecto.
 - Login con Supabase Auth y vista privada del estudiante.
-- Acceso limitado al dominio de correo institucional y a estudiantes activos.
+- Acceso limitado al dominio de correo institucional para estudiantes, docentes y demás usuarios creados en Supabase Auth.
 - Cierre y restauración de sesión.
 - Protección de Áreas Curriculares para estudiantes autenticados.
 
@@ -236,8 +236,8 @@ La autenticación inicial está implementada en `Auth.js` y utiliza Supabase Aut
 2. Al pulsar `Acceso estudiante`, aparece el formulario de login.
 3. El correo debe terminar en `@mariscalcastilla.edu.pe`.
 4. Supabase valida el correo y la contraseña mediante `signInWithPassword()`.
-5. El sistema busca el correo en `estudiantes` y exige `activo = true`.
-6. Con sesión válida se habilita `page-estudiante` y el acceso a Áreas Curriculares.
+5. Con una sesión válida se habilita `page-estudiante` y el acceso a Áreas Curriculares.
+6. Si el correo existe en `estudiantes` y está activo, también se muestran sus datos de estudiante.
 7. La vista muestra las áreas privadas previstas: datos personales, notas y horario.
 8. El cierre de sesión elimina la sesión y oculta nuevamente los accesos restringidos.
 
@@ -258,6 +258,16 @@ No debe colocarse `service_role` en el navegador. Los usuarios deben existir pre
 ### Estado de los datos privados
 
 La interfaz privada está preparada, pero las tarjetas de DNI, notas y horario aparecen como `Próximamente` hasta confirmar el esquema de la tabla `estudiantes` y las tablas académicas. La sesión por sí sola no autoriza a leer datos: Supabase debe tener políticas RLS que comparen el usuario autenticado con el propietario del registro.
+
+### Solicitudes de acceso
+
+Las solicitudes se guardan en `solicitudes_acceso` con estado `pendiente`. Secretaría debe:
+
+1. Revisar la solicitud en Supabase, dentro de `Table Editor`.
+2. Crear o invitar el correo en `Authentication > Users`.
+3. Cambiar `estado` a `aprobado`.
+
+Después de la aprobación, la persona puede iniciar sesión todas las veces que necesite. Las contraseñas se administran únicamente en Supabase Auth y nunca se guardan en `solicitudes_acceso`.
 
 ## 11. Validación antes de publicar
 

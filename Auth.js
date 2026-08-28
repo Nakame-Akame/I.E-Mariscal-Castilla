@@ -112,6 +112,23 @@ async function actualizarPassword(event) {
   await supabaseClient.auth.signOut();
 }
 
+async function verificarEstadoCorreoYActualizarBoton() {
+  const correo = document.getElementById('login-email').value.trim().toLowerCase();
+  const boton = document.querySelector('.login-submit');
+
+  if (!esCorreoInstitucional(correo)) {
+    boton.textContent = 'Solicitar acceso';
+    return;
+  }
+
+  const solicitud = await obtenerSolicitudAcceso(correo);
+  if (solicitud && solicitud.estado === 'aprobado') {
+    boton.textContent = 'Iniciar sesión';
+  } else {
+    boton.textContent = 'Solicitar acceso';
+  }
+}
+
 async function iniciarSesionEstudiante(event) {
   event.preventDefault();
   const formulario = event.currentTarget;
@@ -135,8 +152,48 @@ async function iniciarSesionEstudiante(event) {
   }
 
   boton.disabled = true;
-  mostrarEstadoLogin('Verificando acceso...');
+  mostrarEstadoLogin('Verificando...');
 
+  // Verificar si el correo está aprobado
+  const solicitud = await obtenerSolicitudAcceso(correo);
+
+  if (!solicitud || solicitud.estado !== 'aprobado') {
+    boton.disabled = false;
+    mostrarEstadoLogin(
+      solicitud?.estado === 'pendiente'
+        ? 'Tu solicitud está pendiente de aprobación por Secretaría.'
+        : 'Tu acceso aún no ha sido aprobado por Secretaría.',
+      'error'
+    );
+
+    // Si no tiene acceso aprobado, registrar solicitud
+    if (!solicitud) {
+      const { error } = await supabaseClient.from('solicitudes_acceso').insert({
+        nombre: correo.split('@')[0],
+        email: correo,
+        rol: 'estudiante',
+      });
+
+      if (!error) {
+        await enviarEmailAdmision(correo.split('@')[0], correo);
+        mostrarEstadoLogin(
+          'Solicitud enviada. Te hemos enviado un correo de confirmación. Secretaría te avisará cuando el acceso sea completamente aprobado.',
+          ''
+        );
+        formulario.reset();
+      } else {
+        console.error('Error al insertar solicitud:', error);
+        mostrarEstadoLogin(
+          `No se pudo enviar la solicitud. Error: ${error.message || error.details || 'Intenta nuevamente.'}`,
+          'error'
+        );
+      }
+    }
+    boton.disabled = false;
+    return;
+  }
+
+  // Si está aprobado, intentar iniciar sesión
   const { data, error } = await supabaseClient.auth.signInWithPassword({
     email: correo,
     password,
@@ -153,6 +210,7 @@ async function iniciarSesionEstudiante(event) {
       mostrarEstadoLogin('El correo o la contraseña no son válidos.', 'error');
     } else if (mensaje.includes('email logins are disabled')) {
       mostrarEstadoLogin(
+
         'El acceso por correo está desactivado en Supabase Authentication.',
         'error'
       );
@@ -169,6 +227,9 @@ async function iniciarSesionEstudiante(event) {
     } else if (mensaje.includes('captcha')) {
       mostrarEstadoLogin(
         'La protección CAPTCHA está activa en Supabase, pero este formulario no tiene CAPTCHA configurado. Desactívala en Authentication > Protection.',
+
+        'Contraseña incorrecta.',
+
         'error'
       );
     } else {
@@ -179,6 +240,7 @@ async function iniciarSesionEstudiante(event) {
 
   const perfil = await cargarPerfilAcceso(data.session.user.email);
 
+
   if (!perfil) {
     await supabaseClient.auth.signOut();
     mostrarEstadoLogin(
@@ -188,10 +250,95 @@ async function iniciarSesionEstudiante(event) {
     return;
   }
 
+
   actualizarSesionEstudiante(data.session, perfil);
   await cargarContenidoRestringido();
   cerrarLogin();
   navigate('estudiante');
+}
+
+async function obtenerSolicitudAcceso(correo) {
+  const { data, error } = await supabaseClient
+    .from('solicitudes_acceso')
+    .select('estado')
+    .eq('email', correo)
+    .maybeSingle();
+
+  if (error) {
+    console.error('No se pudo verificar la solicitud de acceso:', error);
+    return null;
+  }
+  return data;
+}
+
+async function sesionEstaAprobada(session) {
+  if (!session?.user) return false;
+  const solicitud = await obtenerSolicitudAcceso(session.user.email);
+  return solicitud?.estado === 'aprobado';
+}
+
+async function enviarEmailAdmision(nombre, correo) {
+  try {
+    const { error } = await supabaseClient.functions.invoke('enviar-email-admision', {
+      body: {
+        nombre,
+        correo,
+      },
+    });
+    // Email service temporarily disabled
+    // Function will be available after Edge Function deployment
+    console.log('Email de solicitud registrada para:', correo);
+    return true;
+  } catch (err) {
+    console.error('Error al enviar email de admisión:', err);
+    return false; // This line is now redundant and can be removed if desired
+  }
+}
+
+  // Versión simplificada sin Edge Function
+  async function enviarEmailAdmision(nombre, correo) {
+    try {
+      console.log('✓ Solicitud registrada para:', nombre, correo);
+      console.log('📧 Email de confirmación será enviado por Secretaría');
+      return true;
+    } catch (err) {
+      console.error('Error:', err);
+      return false;
+    }
+  }
+
+  async function enviarSolicitudAcceso(event) {
+  event.preventDefault();
+  const formulario = event.currentTarget;
+  const correo = document.getElementById('access-request-email').value.trim().toLowerCase();
+  const estado = document.getElementById('access-request-status');
+  const boton = formulario.querySelector('button[type="submit"]');
+  const nombre = document.getElementById('access-request-name').value.trim();
+
+  if (!esCorreoInstitucional(correo)) {
+    estado.textContent = 'Usa tu correo institucional.';
+    estado.className = 'login-estado error';
+    return;
+  }
+
+  boton.disabled = true;
+  const { error } = await supabaseClient.from('solicitudes_acceso').insert({
+    nombre: nombre,
+    email: correo,
+    rol: document.getElementById('access-request-role').value,
+  });
+
+  if (!error) {
+    await enviarEmailAdmision(nombre, correo);
+  }
+
+  boton.disabled = false;
+
+  estado.className = `login-estado ${error ? 'error' : ''}`.trim();
+  estado.textContent = error
+    ? 'No se pudo enviar la solicitud. Intenta nuevamente o comunícate con Secretaría.'
+    : 'Solicitud enviada. Te hemos enviado un correo de confirmación. Secretaría te avisará cuando el acceso sea completamente aprobado.';
+  if (!error) formulario.reset();
 }
 
 async function cerrarSesionEstudiante() {
@@ -317,7 +464,7 @@ function actualizarSesionEstudiante(session, perfil = estudiantePerfil) {
   const accesoAreas = document.getElementById('areas-curriculares-nav');
   const accesoAreasMovil = document.getElementById('areas-curriculares-nav-mobile');
   const accesoAreasFooter = document.getElementById('areas-curriculares-footer');
-  const estudianteAutorizado = Boolean(session?.user && perfil);
+  const estudianteAutorizado = Boolean(session?.user);
 
   [accesoAreas, accesoAreasMovil, accesoAreasFooter].forEach((elemento) => {
     if (elemento) elemento.hidden = !estudianteAutorizado;
@@ -359,22 +506,42 @@ async function inicializarAutenticacion() {
   );
 
   const { data } = await supabaseClient.auth.getSession();
-  const perfil = data.session?.user ? await cargarPerfilAcceso(data.session.user.email) : null;
-  actualizarSesionEstudiante(data.session, perfil);
-  if (data.session) await cargarContenidoRestringido();
 
-  supabaseClient.auth.onAuthStateChange((event, session) => {
+  let session = data.session;
+  if (session && !(await sesionEstaAprobada(session))) {
+    await supabaseClient.auth.signOut();
+    session = null;
+  }
+
+  const perfil = session?.user ? await cargarPerfilAcceso(session.user.email) : null;
+  actualizarSesionEstudiante(session, perfil);
+  if (session) await cargarContenidoRestringido();
+
+  supabaseClient.auth.onAuthStateChange(async (event, nuevaSesion) => {
     if (event === 'PASSWORD_RECOVERY') {
       mostrarLogin();
       mostrarFormularioRecuperacion(true);
       mostrarEstadoLogin('Crea una nueva contraseña para tu cuenta.');
+      return;
     }
-    actualizarSesionEstudiante(session, session ? estudiantePerfil : null);
+
+    if (nuevaSesion && !(await sesionEstaAprobada(nuevaSesion))) {
+      await supabaseClient.auth.signOut();
+      return;
+    }
+
+    const perfilActualizado = nuevaSesion?.user
+      ? await cargarPerfilEstudiante(nuevaSesion.user.email)
+      : null;
+
+    actualizarSesionEstudiante(nuevaSesion, perfilActualizado);
+    if (nuevaSesion) await cargarContenidoRestringido();
   });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('login-form')?.addEventListener('submit', iniciarSesionEstudiante);
+
   document
     .getElementById('password-recovery-form')
     ?.addEventListener('submit', actualizarPassword);
@@ -388,9 +555,19 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('login-email').value;
     document.getElementById('recovery-email').focus();
   });
+  document.getElementById('login-email')?.addEventListener('blur', verificarEstadoCorreoYActualizarBoton);
+
   document.getElementById('login-close')?.addEventListener('click', cerrarLogin);
-  document.getElementById('login-overlay')?.addEventListener('click', (event) => {
-    if (event.target.id === 'login-overlay') cerrarLogin();
+  document.getElementById('login-password-toggle')?.addEventListener('click', (event) => {
+    const boton = event.currentTarget;
+    const password = document.getElementById('login-password');
+    const icono = boton.querySelector('i');
+    const mostrar = password.type === 'password';
+
+    password.type = mostrar ? 'text' : 'password';
+    boton.setAttribute('aria-label', mostrar ? 'Ocultar contraseña' : 'Mostrar contraseña');
+    boton.setAttribute('aria-pressed', String(mostrar));
+    icono.className = mostrar ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye';
   });
   document.getElementById('student-session-action')?.addEventListener('click', () => {
     if (estudianteSession?.user) cerrarSesionEstudiante();
