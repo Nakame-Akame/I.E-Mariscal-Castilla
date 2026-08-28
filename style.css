@@ -2400,6 +2400,18 @@ footer {
   width: 100%;
   margin-top: 0.5rem;
 }
+.login-recovery-link {
+  display: block;
+  margin: 0.9rem auto 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--red);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.8rem;
+  text-decoration: underline;
+}
 .login-help {
   margin: 1.25rem 0 0;
   padding-top: 1rem;
@@ -2417,6 +2429,9 @@ footer {
 }
 .login-estado.error {
   color: var(--red);
+}
+.login-estado.success {
+  color: #237a45;
 }
 
 @media (max-width: 800px) {

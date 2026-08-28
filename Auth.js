@@ -21,6 +21,7 @@ function mostrarLogin() {
 
 function cerrarLogin() {
   document.getElementById('login-overlay')?.classList.remove('active');
+  mostrarFormularioRecuperacion(false);
   limpiarEstadoLogin();
 }
 
@@ -39,14 +40,76 @@ function mostrarEstadoLogin(mensaje, tipo = '') {
 function esCorreoInstitucional(correo) {
   const config = window.SUPABASE_CONFIG;
   const correoNormalizado = correo.trim().toLowerCase();
-  const dominio = config?.institutionalEmailDomain;
-  const correosDePrueba = (config?.allowedTestEmails || []).map((email) =>
-    email.trim().toLowerCase()
-  );
-  return Boolean(
-    (dominio && correoNormalizado.endsWith(`@${dominio}`)) ||
-    correosDePrueba.includes(correoNormalizado)
-  );
+  const dominio = config?.institutionalEmailDomain?.trim().toLowerCase();
+  return Boolean(dominio && correoNormalizado.endsWith(`@${dominio}`));
+}
+
+function obtenerUrlRedireccion() {
+  return `${window.location.origin}${window.location.pathname}#login`;
+}
+
+function mostrarFormularioRecuperacion(mostrar) {
+  document.getElementById('login-form')?.toggleAttribute('hidden', mostrar);
+  document.getElementById('password-recovery-form')?.toggleAttribute('hidden', !mostrar);
+  document.getElementById('login-recovery-link')?.toggleAttribute('hidden', mostrar);
+}
+
+async function solicitarRecuperacionPassword(event) {
+  event.preventDefault();
+  const correo = document.getElementById('recovery-email').value.trim().toLowerCase();
+  const boton = event.currentTarget.querySelector('button[type="submit"]');
+
+  if (!esCorreoInstitucional(correo)) {
+    mostrarEstadoLogin('Usa un correo institucional válido.', 'error');
+    return;
+  }
+
+  if (!supabaseConfigurado()) {
+    mostrarEstadoLogin('Configura Supabase para recuperar el acceso.', 'error');
+    return;
+  }
+
+  boton.disabled = true;
+  mostrarEstadoLogin('Si la cuenta existe, recibirás instrucciones en tu correo.');
+  const { error } = await supabaseClient.auth.resetPasswordForEmail(correo, {
+    redirectTo: obtenerUrlRedireccion(),
+  });
+  boton.disabled = false;
+
+  if (error) {
+    console.error('Error al solicitar recuperación de contraseña:', error);
+    mostrarEstadoLogin('No se pudo enviar el correo. Intenta nuevamente más tarde.', 'error');
+  }
+}
+
+async function actualizarPassword(event) {
+  event.preventDefault();
+  const password = document.getElementById('new-password').value;
+  const confirmacion = document.getElementById('new-password-confirmation').value;
+  const boton = event.currentTarget.querySelector('button[type="submit"]');
+
+  if (password.length < 8) {
+    mostrarEstadoLogin('La contraseña debe tener al menos 8 caracteres.', 'error');
+    return;
+  }
+  if (password !== confirmacion) {
+    mostrarEstadoLogin('Las contraseñas no coinciden.', 'error');
+    return;
+  }
+
+  boton.disabled = true;
+  const { error } = await supabaseClient.auth.updateUser({ password });
+  boton.disabled = false;
+  if (error) {
+    console.error('Error al actualizar la contraseña:', error);
+    mostrarEstadoLogin('No se pudo actualizar la contraseña. Intenta nuevamente.', 'error');
+    return;
+  }
+
+  document.getElementById('password-recovery-form').reset();
+  mostrarFormularioRecuperacion(false);
+  mostrarEstadoLogin('Contraseña actualizada. Ya puedes iniciar sesión.', 'success');
+  await supabaseClient.auth.signOut();
 }
 
 async function iniciarSesionEstudiante(event) {
@@ -57,7 +120,12 @@ async function iniciarSesionEstudiante(event) {
   const boton = formulario.querySelector('button[type="submit"]');
 
   if (!esCorreoInstitucional(correo)) {
-    mostrarEstadoLogin('Usa tu correo institucional o el correo de prueba autorizado.', 'error');
+    mostrarEstadoLogin('Usa un correo institucional válido.', 'error');
+    return;
+  }
+
+  if (password.length < 8) {
+    mostrarEstadoLogin('La contraseña debe tener al menos 8 caracteres.', 'error');
     return;
   }
 
@@ -82,10 +150,7 @@ async function iniciarSesionEstudiante(event) {
     if (mensaje.includes('email not confirmed')) {
       mostrarEstadoLogin('Confirma primero el correo en Supabase Authentication.', 'error');
     } else if (mensaje.includes('invalid login credentials')) {
-      mostrarEstadoLogin(
-        'El correo no existe en Authentication o la contraseña no coincide.',
-        'error'
-      );
+      mostrarEstadoLogin('El correo o la contraseña no son válidos.', 'error');
     } else if (mensaje.includes('email logins are disabled')) {
       mostrarEstadoLogin(
         'El acceso por correo está desactivado en Supabase Authentication.',
@@ -107,20 +172,17 @@ async function iniciarSesionEstudiante(event) {
         'error'
       );
     } else {
-      mostrarEstadoLogin(
-        `Supabase rechazó el acceso: ${error.message || 'error desconocido'}`,
-        'error'
-      );
+      mostrarEstadoLogin('No se pudo iniciar sesión. Intenta nuevamente.', 'error');
     }
     return;
   }
 
-  const perfil = await cargarPerfilEstudiante(data.session.user.email);
+  const perfil = await cargarPerfilAcceso(data.session.user.email);
 
   if (!perfil) {
     await supabaseClient.auth.signOut();
     mostrarEstadoLogin(
-      `El correo ${data.session.user.email} inició sesión, pero no tiene un registro activo en la tabla estudiantes.`,
+      `El correo ${data.session.user.email} inició sesión, pero no tiene un registro activo de acceso.`,
       'error'
     );
     return;
@@ -150,6 +212,30 @@ async function cargarPerfilEstudiante(correo) {
     console.error('No se pudo consultar el perfil del estudiante:', error);
     mostrarEstadoLogin(
       'No se pudo verificar el registro estudiantil. Revisa las políticas RLS.',
+      'error'
+    );
+    return null;
+  }
+
+  estudiantePerfil = data;
+  return data;
+}
+
+async function cargarPerfilAcceso(correo) {
+  const perfilEstudiante = await cargarPerfilEstudiante(correo);
+  if (perfilEstudiante) return perfilEstudiante;
+
+  const { data, error } = await supabaseClient
+    .from('usuarios_acceso')
+    .select('id, nombres, apellidos, email, rol, activo')
+    .ilike('email', correo.trim())
+    .eq('activo', true)
+    .maybeSingle();
+
+  if (error) {
+    console.error('No se pudo consultar el acceso del usuario:', error);
+    mostrarEstadoLogin(
+      'No se pudo verificar el acceso. Revisa las políticas RLS y la tabla usuarios_acceso.',
       'error'
     );
     return null;
@@ -273,17 +359,35 @@ async function inicializarAutenticacion() {
   );
 
   const { data } = await supabaseClient.auth.getSession();
-  const perfil = data.session?.user ? await cargarPerfilEstudiante(data.session.user.email) : null;
+  const perfil = data.session?.user ? await cargarPerfilAcceso(data.session.user.email) : null;
   actualizarSesionEstudiante(data.session, perfil);
   if (data.session) await cargarContenidoRestringido();
 
-  supabaseClient.auth.onAuthStateChange((_event, session) => {
+  supabaseClient.auth.onAuthStateChange((event, session) => {
+    if (event === 'PASSWORD_RECOVERY') {
+      mostrarLogin();
+      mostrarFormularioRecuperacion(true);
+      mostrarEstadoLogin('Crea una nueva contraseña para tu cuenta.');
+    }
     actualizarSesionEstudiante(session, session ? estudiantePerfil : null);
   });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('login-form')?.addEventListener('submit', iniciarSesionEstudiante);
+  document
+    .getElementById('password-recovery-form')
+    ?.addEventListener('submit', actualizarPassword);
+  document
+    .getElementById('login-recovery-form')
+    ?.addEventListener('submit', solicitarRecuperacionPassword);
+  document.getElementById('login-recovery-link')?.addEventListener('click', (event) => {
+    event.preventDefault();
+    mostrarFormularioRecuperacion(true);
+    document.getElementById('recovery-email').value =
+      document.getElementById('login-email').value;
+    document.getElementById('recovery-email').focus();
+  });
   document.getElementById('login-close')?.addEventListener('click', cerrarLogin);
   document.getElementById('login-overlay')?.addEventListener('click', (event) => {
     if (event.target.id === 'login-overlay') cerrarLogin();
