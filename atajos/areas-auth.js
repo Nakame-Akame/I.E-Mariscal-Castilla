@@ -14,7 +14,7 @@ const areasLoginRequired = document.getElementById('areas-login-required');
 const areasLoginButton = document.getElementById('areas-login-button');
 
 function actualizarAccesoAreas(session, perfil) {
-  const tieneSesion = Boolean(session?.user && perfil);
+  const tieneSesion = Boolean(session?.user);
   areasCurriculares?.classList.toggle('acceso-autorizado', tieneSesion);
   if (areasLoginRequired) areasLoginRequired.hidden = tieneSesion;
 }
