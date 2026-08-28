@@ -2413,6 +2413,10 @@ footer {
   border-color: var(--red);
   box-shadow: 0 0 0 3px rgba(139, 0, 0, 0.1);
 }
+.login-field-hint {
+  color: var(--gray);
+  font-size: 0.75rem;
+}
 .login-password-wrap {
   position: relative;
 }
@@ -2458,6 +2462,11 @@ footer {
   font: inherit;
   font-size: 0.8rem;
   text-decoration: underline;
+}
+.login-recovery-link:disabled {
+  color: var(--gray);
+  cursor: not-allowed;
+  text-decoration: none;
 }
 .login-help {
   margin: 1.25rem 0 0;
