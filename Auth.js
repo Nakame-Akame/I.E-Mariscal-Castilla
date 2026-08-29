@@ -1,6 +1,9 @@
 let supabaseClient = null;
 let estudianteSession = null;
 let estudiantePerfil = null;
+let otpUsuarioPendiente = null;
+let otpCooldownTimer = null;
+let autenticacionOtpEnCurso = false;
 
 function supabaseConfigurado() {
   const config = window.SUPABASE_CONFIG;
@@ -22,6 +25,11 @@ function mostrarLogin() {
 function cerrarLogin() {
   document.getElementById('login-overlay')?.classList.remove('active');
   mostrarFormularioRecuperacion(false);
+  mostrarFormularioOtp(false);
+  mostrarFormularioRegistro(false);
+  clearInterval(otpCooldownTimer);
+  if (otpUsuarioPendiente && supabaseClient) supabaseClient.auth.signOut();
+  otpUsuarioPendiente = null;
   limpiarEstadoLogin();
 }
 
@@ -52,6 +60,39 @@ function mostrarFormularioRecuperacion(mostrar) {
   document.getElementById('login-form')?.toggleAttribute('hidden', mostrar);
   document.getElementById('password-recovery-form')?.toggleAttribute('hidden', !mostrar);
   document.getElementById('login-recovery-link')?.toggleAttribute('hidden', mostrar);
+}
+
+function mostrarFormularioOtp(mostrar) {
+  document.getElementById('login-form')?.toggleAttribute('hidden', mostrar);
+  document.getElementById('otp-form')?.toggleAttribute('hidden', !mostrar);
+  document.getElementById('registration-form')?.toggleAttribute('hidden', true);
+  document.getElementById('login-recovery-link')?.toggleAttribute('hidden', mostrar);
+}
+
+function mostrarFormularioRegistro(mostrar) {
+  document.getElementById('login-form')?.toggleAttribute('hidden', mostrar);
+  document.getElementById('registration-form')?.toggleAttribute('hidden', !mostrar);
+  document.getElementById('otp-form')?.toggleAttribute('hidden', true);
+  document.getElementById('login-recovery-link')?.toggleAttribute('hidden', mostrar);
+}
+
+function iniciarCooldownOtp(segundos = 60) {
+  const boton = document.getElementById('otp-resend');
+  if (!boton) return;
+  let restantes = segundos;
+  boton.disabled = true;
+  boton.textContent = `Reenviar código (${restantes}s)`;
+  clearInterval(otpCooldownTimer);
+  otpCooldownTimer = setInterval(() => {
+    restantes -= 1;
+    if (restantes <= 0) {
+      clearInterval(otpCooldownTimer);
+      boton.disabled = false;
+      boton.textContent = 'Reenviar código';
+      return;
+    }
+    boton.textContent = `Reenviar código (${restantes}s)`;
+  }, 1000);
 }
 
 async function solicitarRecuperacionPassword(event) {
@@ -113,20 +154,8 @@ async function actualizarPassword(event) {
 }
 
 async function verificarEstadoCorreoYActualizarBoton() {
-  const correo = document.getElementById('login-email').value.trim().toLowerCase();
   const boton = document.querySelector('.login-submit');
-
-  if (!esCorreoInstitucional(correo)) {
-    boton.textContent = 'Solicitar acceso';
-    return;
-  }
-
-  const solicitud = await obtenerSolicitudAcceso(correo);
-  if (solicitud && solicitud.estado === 'aprobado') {
-    boton.textContent = 'Iniciar sesión';
-  } else {
-    boton.textContent = 'Solicitar acceso';
-  }
+  if (boton) boton.textContent = 'Iniciar sesión';
 }
 
 async function iniciarSesionEstudiante(event) {
@@ -153,53 +182,16 @@ async function iniciarSesionEstudiante(event) {
 
   boton.disabled = true;
   mostrarEstadoLogin('Verificando...');
+  autenticacionOtpEnCurso = true;
 
-  // Verificar si el correo está aprobado
-  const solicitud = await obtenerSolicitudAcceso(correo);
-
-  if (!solicitud || solicitud.estado !== 'aprobado') {
-    boton.disabled = false;
-    mostrarEstadoLogin(
-      solicitud?.estado === 'pendiente'
-        ? 'Tu solicitud está pendiente de aprobación por Secretaría.'
-        : 'Tu acceso aún no ha sido aprobado por Secretaría.',
-      'error'
-    );
-
-    // Si no tiene acceso aprobado, registrar solicitud
-    if (!solicitud) {
-      const { error } = await supabaseClient.from('solicitudes_acceso').insert({
-        nombre: correo.split('@')[0],
-        email: correo,
-        rol: 'estudiante',
-      });
-
-      if (!error) {
-        await enviarEmailAdmision(correo.split('@')[0], correo);
-        mostrarEstadoLogin(
-          'Solicitud enviada. Te hemos enviado un correo de confirmación. Secretaría te avisará cuando el acceso sea completamente aprobado.',
-          ''
-        );
-        formulario.reset();
-      } else {
-        console.error('Error al insertar solicitud:', error);
-        mostrarEstadoLogin(
-          `No se pudo enviar la solicitud. Error: ${error.message || error.details || 'Intenta nuevamente.'}`,
-          'error'
-        );
-      }
-    }
-    boton.disabled = false;
-    return;
-  }
-
-  // Si está aprobado, intentar iniciar sesión
+  // La sesión de Supabase se crea, pero el contenido queda bloqueado hasta validar el OTP.
   const { data, error } = await supabaseClient.auth.signInWithPassword({
     email: correo,
     password,
   });
 
   boton.disabled = false;
+  autenticacionOtpEnCurso = false;
 
   if (error) {
     const mensaje = error.message?.toLowerCase() || '';
@@ -208,6 +200,7 @@ async function iniciarSesionEstudiante(event) {
       mostrarEstadoLogin('Confirma primero el correo en Supabase Authentication.', 'error');
     } else if (mensaje.includes('invalid login credentials')) {
       mostrarEstadoLogin('El correo o la contraseña no son válidos.', 'error');
+      document.getElementById('login-register-link')?.removeAttribute('hidden');
     } else if (mensaje.includes('email logins are disabled')) {
       mostrarEstadoLogin(
 
@@ -227,9 +220,6 @@ async function iniciarSesionEstudiante(event) {
     } else if (mensaje.includes('captcha')) {
       mostrarEstadoLogin(
         'La protección CAPTCHA está activa en Supabase, pero este formulario no tiene CAPTCHA configurado. Desactívala en Authentication > Protection.',
-
-        'Contraseña incorrecta.',
-
         'error'
       );
     } else {
@@ -238,23 +228,95 @@ async function iniciarSesionEstudiante(event) {
     return;
   }
 
-  const perfil = await cargarPerfilAcceso(data.session.user.email);
-
-
-  if (!perfil) {
+  otpUsuarioPendiente = data.session.user.id;
+  const resultado = await enviarCodigoOtp(otpUsuarioPendiente);
+  boton.disabled = false;
+  if (!resultado) {
     await supabaseClient.auth.signOut();
-    mostrarEstadoLogin(
-      `El correo ${data.session.user.email} inició sesión, pero no tiene un registro activo de acceso.`,
-      'error'
-    );
+    otpUsuarioPendiente = null;
     return;
   }
+  document.getElementById('otp-email')?.replaceChildren(document.createTextNode(correo));
+  mostrarFormularioOtp(true);
+  mostrarEstadoLogin('Te enviamos un código de 6 dígitos a tu correo institucional.');
+  iniciarCooldownOtp();
+  document.getElementById('login-register-link')?.setAttribute('hidden', '');
+  document.getElementById('otp-code')?.focus();
+}
 
+async function enviarCodigoOtp(userId) {
+  try {
+    const { error } = await supabaseClient.functions.invoke('send-otp', {
+      body: { user_id: userId },
+    });
+    if (error) throw error;
+    return true;
+  } catch (error) {
+    console.error('Error al enviar OTP:', error);
+    mostrarEstadoLogin('No se pudo enviar el código. Intenta nuevamente.', 'error');
+    return false;
+  }
+}
 
-  actualizarSesionEstudiante(data.session, perfil);
+async function verificarOtp(event) {
+  event.preventDefault();
+  const codigo = document.getElementById('otp-code').value.trim();
+  const boton = event.currentTarget.querySelector('button[type="submit"]');
+  if (!/^\d{6}$/.test(codigo) || !otpUsuarioPendiente) {
+    mostrarEstadoLogin('Ingresa un código válido de 6 dígitos.', 'error');
+    return;
+  }
+  boton.disabled = true;
+  const { data, error } = await supabaseClient.functions.invoke('verify-otp', {
+    body: { user_id: otpUsuarioPendiente, code: codigo },
+  });
+  boton.disabled = false;
+  if (error || !data?.success) {
+    mostrarEstadoLogin(data?.error || 'El código no es válido o ha expirado.', 'error');
+    return;
+  }
+  sessionStorage.setItem('otp_verificado_user_id', otpUsuarioPendiente);
+  const { data: sesion } = await supabaseClient.auth.getSession();
+  const perfil = await cargarPerfilAcceso(sesion.session.user.email);
+  actualizarSesionEstudiante(sesion.session, perfil);
   await cargarContenidoRestringido();
+  otpUsuarioPendiente = null;
   cerrarLogin();
   navigate('estudiante');
+}
+
+async function reenviarOtp() {
+  if (!otpUsuarioPendiente) return;
+  const enviado = await enviarCodigoOtp(otpUsuarioPendiente);
+  if (enviado) {
+    mostrarEstadoLogin('Código reenviado. Revisa tu correo.');
+    iniciarCooldownOtp();
+  }
+}
+
+async function registrarEstudiante(event) {
+  event.preventDefault();
+  const correo = document.getElementById('register-email').value.trim().toLowerCase();
+  const password = document.getElementById('register-password').value;
+  const boton = event.currentTarget.querySelector('button[type="submit"]');
+  if (!esCorreoInstitucional(correo)) {
+    mostrarEstadoLogin('Usa un correo institucional válido.', 'error');
+    return;
+  }
+  if (password.length < 8) {
+    mostrarEstadoLogin('La contraseña debe tener al menos 8 caracteres.', 'error');
+    return;
+  }
+  boton.disabled = true;
+  const { error } = await supabaseClient.auth.signUp({ email: correo, password });
+  boton.disabled = false;
+  if (error) {
+    mostrarEstadoLogin(error.message || 'No se pudo crear la cuenta.', 'error');
+    return;
+  }
+  mostrarFormularioRegistro(false);
+  mostrarEstadoLogin('Registro creado. Confirma tu correo y luego inicia sesión.', 'success');
+  event.currentTarget.reset();
 }
 
 async function obtenerSolicitudAcceso(correo) {
@@ -272,9 +334,9 @@ async function obtenerSolicitudAcceso(correo) {
 }
 
 async function sesionEstaAprobada(session) {
-  if (!session?.user) return false;
-  const solicitud = await obtenerSolicitudAcceso(session.user.email);
-  return solicitud?.estado === 'aprobado';
+  return Boolean(
+    session?.user && sessionStorage.getItem('otp_verificado_user_id') === session.user.id
+  );
 }
 
 async function enviarEmailAdmision(nombre, correo) {
@@ -285,27 +347,13 @@ async function enviarEmailAdmision(nombre, correo) {
         correo,
       },
     });
-    // Email service temporarily disabled
-    // Function will be available after Edge Function deployment
-    console.log('Email de solicitud registrada para:', correo);
+    if (error) throw error;
     return true;
   } catch (err) {
     console.error('Error al enviar email de admisión:', err);
     return false; // This line is now redundant and can be removed if desired
   }
 }
-
-  // Versión simplificada sin Edge Function
-  async function enviarEmailAdmision(nombre, correo) {
-    try {
-      console.log('✓ Solicitud registrada para:', nombre, correo);
-      console.log('📧 Email de confirmación será enviado por Secretaría');
-      return true;
-    } catch (err) {
-      console.error('Error:', err);
-      return false;
-    }
-  }
 
   async function enviarSolicitudAcceso(event) {
   event.preventDefault();
@@ -525,6 +573,8 @@ async function inicializarAutenticacion() {
       return;
     }
 
+    if (autenticacionOtpEnCurso || (nuevaSesion && otpUsuarioPendiente === nuevaSesion.user.id)) return;
+
     if (nuevaSesion && !(await sesionEstaAprobada(nuevaSesion))) {
       await supabaseClient.auth.signOut();
       return;
@@ -541,6 +591,18 @@ async function inicializarAutenticacion() {
 
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('login-form')?.addEventListener('submit', iniciarSesionEstudiante);
+  document.getElementById('otp-form')?.addEventListener('submit', verificarOtp);
+  document.getElementById('otp-resend')?.addEventListener('click', reenviarOtp);
+  document.getElementById('registration-form')?.addEventListener('submit', registrarEstudiante);
+  document.getElementById('login-register-link')?.addEventListener('click', () => {
+    document.getElementById('register-email').value = document.getElementById('login-email').value;
+    mostrarFormularioRegistro(true);
+    document.getElementById('register-email').focus();
+  });
+  document.getElementById('login-back-link')?.addEventListener('click', () => {
+    mostrarFormularioRegistro(false);
+    document.getElementById('login-email')?.focus();
+  });
 
   document
     .getElementById('password-recovery-form')
