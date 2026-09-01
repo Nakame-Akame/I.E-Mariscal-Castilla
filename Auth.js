@@ -155,7 +155,28 @@ async function actualizarPassword(event) {
 
 async function verificarEstadoCorreoYActualizarBoton() {
   const boton = document.querySelector('.login-submit');
-  if (boton) boton.textContent = 'Iniciar sesión';
+  const correo = document.getElementById('login-email')?.value.trim().toLowerCase();
+  if (!boton || !correo || !esCorreoInstitucional(correo) || !supabaseConfigurado()) {
+    if (boton) boton.textContent = 'Registrar usuario';
+    return;
+  }
+
+  const cuentaReconocida = await correoTieneCuenta(correo);
+  boton.textContent = cuentaReconocida ? 'Iniciar sesión' : 'Registrar usuario';
+}
+
+async function correoTieneCuenta(correo) {
+  const tablas = ['estudiantes', 'usuarios_acceso'];
+  for (const tabla of tablas) {
+    const { data, error } = await supabaseClient
+      .from(tabla)
+      .select('id')
+      .ilike('email', correo)
+      .limit(1);
+
+    if (!error && data?.length) return true;
+  }
+  return false;
 }
 
 async function iniciarSesionEstudiante(event) {
@@ -180,6 +201,11 @@ async function iniciarSesionEstudiante(event) {
     return;
   }
 
+  if (formulario.querySelector('.login-submit')?.textContent === 'Registrar usuario') {
+    await registrarCuentaDesdeLogin(correo, password, boton);
+    return;
+  }
+
   boton.disabled = true;
   mostrarEstadoLogin('Verificando...');
   autenticacionOtpEnCurso = true;
@@ -200,7 +226,7 @@ async function iniciarSesionEstudiante(event) {
       mostrarEstadoLogin('Confirma primero el correo en Supabase Authentication.', 'error');
     } else if (mensaje.includes('invalid login credentials')) {
       mostrarEstadoLogin('El correo o la contraseña no son válidos.', 'error');
-      document.getElementById('login-register-link')?.removeAttribute('hidden');
+      document.getElementById('login-register-link')?.setAttribute('hidden', '');
     } else if (mensaje.includes('email logins are disabled')) {
       mostrarEstadoLogin(
 
@@ -244,6 +270,27 @@ async function iniciarSesionEstudiante(event) {
   document.getElementById('otp-code')?.focus();
 }
 
+async function registrarCuentaDesdeLogin(correo, password, boton) {
+  boton.disabled = true;
+  mostrarEstadoLogin('Registrando usuario...');
+  const { error } = await supabaseClient.auth.signUp({ email: correo, password });
+  boton.disabled = false;
+
+  if (error) {
+    const mensaje = error.message?.toLowerCase() || '';
+    if (mensaje.includes('already registered') || mensaje.includes('already been registered')) {
+      boton.textContent = 'Iniciar sesión';
+      mostrarEstadoLogin('Este correo ya está registrado. Inicia sesión.', 'error');
+      return;
+    }
+    mostrarEstadoLogin(error.message || 'No se pudo registrar el usuario.', 'error');
+    return;
+  }
+
+  mostrarEstadoLogin('Usuario registrado. Confirma tu correo y luego inicia sesión.', 'success');
+  boton.textContent = 'Iniciar sesión';
+}
+
 async function enviarCodigoOtp(userId) {
   try {
     const { error } = await supabaseClient.functions.invoke('send-otp', {
@@ -253,7 +300,18 @@ async function enviarCodigoOtp(userId) {
     return true;
   } catch (error) {
     console.error('Error al enviar OTP:', error);
-    mostrarEstadoLogin('No se pudo enviar el código. Intenta nuevamente.', 'error');
+    let detalle = '';
+    if (error?.context?.clone) {
+      const respuesta = await error.context.clone().json().catch(() => null);
+      detalle = respuesta?.error || '';
+    }
+    if (detalle.toLowerCase().includes('only send testing emails')) {
+      detalle = 'Resend solo permite enviar al correo de prueba. Verifica el dominio institucional en Resend';
+    }
+    mostrarEstadoLogin(
+      detalle ? `No se pudo enviar el código: ${detalle}.` : 'No se pudo enviar el código. Intenta nuevamente.',
+      'error'
+    );
     return false;
   }
 }
@@ -618,6 +676,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('recovery-email').focus();
   });
   document.getElementById('login-email')?.addEventListener('blur', verificarEstadoCorreoYActualizarBoton);
+  document.getElementById('login-email')?.addEventListener('change', verificarEstadoCorreoYActualizarBoton);
 
   document.getElementById('login-close')?.addEventListener('click', cerrarLogin);
   document.getElementById('login-password-toggle')?.addEventListener('click', (event) => {

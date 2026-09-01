@@ -5,6 +5,7 @@ const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!
 const SUPABASE_ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY")!
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY")
+const RESEND_FROM_EMAIL = Deno.env.get("RESEND_FROM_EMAIL") || "onboarding@resend.dev"
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
@@ -65,15 +66,17 @@ serve(async (req: Request) => {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_API_KEY}` },
       body: JSON.stringify({
-        from: "admin@mariscalcastilla.edu.pe",
+        from: RESEND_FROM_EMAIL,
         to: authData.user.email,
         subject: "Código de verificación - Portal Estudiantes",
         html: `<div style="font-family:Arial,sans-serif;max-width:600px;margin:auto"><h1 style="color:#c41e3a">Verificación de acceso</h1><p>Tu código de verificación es:</p><p style="font-size:32px;font-weight:bold;letter-spacing:8px;text-align:center">${code}</p><p>Caduca en 10 minutos y solo puede usarse una vez.</p><p>Si no solicitaste este acceso, ignora este mensaje.</p></div>`,
       }),
     })
     if (!emailResponse.ok) {
-      console.error("Error enviando OTP:", await emailResponse.text())
-      return response({ error: "No se pudo enviar el código" }, 500)
+      const resendError = await emailResponse.json().catch(() => null)
+      const detalle = resendError?.message || resendError?.name || "Resend rechazó el envío"
+      console.error("Error enviando OTP:", resendError || detalle)
+      return response({ error: detalle }, 502)
     }
     return response({ success: true })
   } catch (error) {
