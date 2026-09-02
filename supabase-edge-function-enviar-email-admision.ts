@@ -1,7 +1,9 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { Resend } from "https://cdn.jsdelivr.net/npm/resend@latest/dist/index.d.ts";
 
-const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
+const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+const RESEND_FROM_EMAIL = Deno.env.get("RESEND_FROM_EMAIL") || "noreply@mariscalcastilla.edu.pe";
+const resend = new Resend(RESEND_API_KEY);
 
 interface RequestBody {
   nombre: string;
@@ -30,7 +32,7 @@ serve(async (req: Request) => {
 
     // Enviar email usando Resend
     const result = await resend.emails.send({
-      from: "admin@mariscalcastilla.edu.pe", // Cambia a tu dominio
+      from: RESEND_FROM_EMAIL,
       to: correo,
       subject: "✓ Acceso Admitido - Portal Estudiantes",
       html: `

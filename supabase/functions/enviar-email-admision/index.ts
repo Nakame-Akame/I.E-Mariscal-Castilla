@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY")
+const RESEND_FROM_EMAIL = Deno.env.get("RESEND_FROM_EMAIL") || "noreply@mariscalcastilla.edu.pe"
 
 interface RequestBody {
   nombre?: string
@@ -46,7 +47,7 @@ serve(async (req: Request) => {
         Authorization: `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: "admin@mariscalcastilla.edu.pe",
+        from: RESEND_FROM_EMAIL,
         to: correo,
         subject: "✓ Solicitud de Acceso Recibida - Portal Estudiantes",
         html: `
