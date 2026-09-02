@@ -158,25 +158,12 @@ async function verificarEstadoCorreoYActualizarBoton() {
   const correo = document.getElementById('login-email')?.value.trim().toLowerCase();
   if (!boton || !correo || !esCorreoInstitucional(correo) || !supabaseConfigurado()) {
     if (boton) boton.textContent = 'Registrar usuario';
+    document.getElementById('login-register-link')?.setAttribute('hidden', '');
     return;
   }
 
-  const cuentaReconocida = await correoTieneCuenta(correo);
-  boton.textContent = cuentaReconocida ? 'Iniciar sesión' : 'Registrar usuario';
-}
-
-async function correoTieneCuenta(correo) {
-  const tablas = ['estudiantes', 'usuarios_acceso'];
-  for (const tabla of tablas) {
-    const { data, error } = await supabaseClient
-      .from(tabla)
-      .select('id')
-      .ilike('email', correo)
-      .limit(1);
-
-    if (!error && data?.length) return true;
-  }
-  return false;
+  boton.textContent = 'Iniciar sesión';
+  document.getElementById('login-register-link')?.removeAttribute('hidden');
 }
 
 async function iniciarSesionEstudiante(event) {

@@ -110,6 +110,23 @@ Breakpoints definidos:
 
 ## 🚀 Deployment
 
+### Correo OTP con Resend y Supabase
+
+El envío de códigos usa `noreply@mariscalcastilla.edu.pe` como remitente. Antes de desplegar la función:
+
+1. En Resend, agrega `mariscalcastilla.edu.pe` en **Domains**.
+2. Publica en el DNS institucional los registros SPF y DKIM que Resend proporciona.
+3. Espera a que el dominio aparezca como **Verified**.
+4. En Supabase, configura los secretos del proyecto:
+
+```bash
+supabase secrets set RESEND_API_KEY=re_xxxxxxxxx
+supabase secrets set RESEND_FROM_EMAIL=noreply@mariscalcastilla.edu.pe
+supabase functions deploy send-otp
+```
+
+No uses `onboarding@resend.dev` ni otro remitente de prueba en producción: Resend solo permite esos remitentes hacia el correo de prueba de la cuenta.
+
 ### GitHub Pages
 1. Activar GitHub Pages en Settings
 2. Seleccionar rama `main` o `gh-pages`

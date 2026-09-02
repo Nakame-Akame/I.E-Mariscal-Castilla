@@ -76,6 +76,12 @@ serve(async (req: Request) => {
       const resendError = await emailResponse.json().catch(() => null)
       const detalle = resendError?.message || resendError?.name || "Resend rechazó el envío"
       console.error("Error enviando OTP:", resendError || detalle)
+      const mensaje = String(detalle).toLowerCase()
+      if (mensaje.includes("only send testing emails") || mensaje.includes("testing emails")) {
+        return response({
+          error: "Resend solo permite enviar al correo de prueba. Verifica el dominio mariscalcastilla.edu.pe y configura RESEND_FROM_EMAIL con un remitente de ese dominio.",
+        }, 502)
+      }
       return response({ error: detalle }, 502)
     }
     return response({ success: true })
