@@ -39,7 +39,11 @@ function limpiarEstadoLogin() {
 }
 
 function mostrarEstadoLogin(mensaje, tipo = '') {
-  const estado = document.getElementById('login-estado');
+  const estados = [
+    document.getElementById('login-estado'),
+    document.getElementById('registration-estado'),
+  ].filter(Boolean);
+  const estado = estados.find((elemento) => !elemento.closest('[hidden]')) || estados[0];
   if (!estado) return;
   estado.textContent = mensaje;
   estado.className = `login-estado ${tipo}`.trim();
@@ -59,6 +63,42 @@ function obtenerUrlRedireccion() {
     return 'http://localhost:8000/index.html#login';
   }
   return `${window.location.origin}${window.location.pathname}#login`;
+}
+
+function mostrarErrorRegistro(error, boton, formularioRegistro = false) {
+  const mensaje = error?.message?.toLowerCase() || '';
+  console.error('Error de registro en Supabase:', error);
+
+  if (mensaje.includes('error sending confirmation email') || mensaje.includes('unexpected_failure')) {
+    mostrarEstadoLogin(
+      'Supabase no pudo enviar el correo de confirmación. Configura un proveedor SMTP en Authentication > SMTP o desactiva la confirmación de correo.',
+      'error'
+    );
+    return;
+  }
+  if (mensaje.includes('redirect url') || mensaje.includes('redirect_to')) {
+    mostrarEstadoLogin(
+      'La URL local no está autorizada en Supabase. Añade la dirección actual en Authentication > URL Configuration.',
+      'error'
+    );
+    return;
+  }
+  if (mensaje.includes('already registered') || mensaje.includes('already been registered')) {
+    boton.textContent = 'Iniciar sesión';
+    if (formularioRegistro) {
+      mostrarFormularioRegistro(false);
+      mostrarEstadoLogin('Este correo ya está registrado. Confirma el correo y vuelve a iniciar sesión.', 'error');
+      document.getElementById('login-confirm-resend-link')?.removeAttribute('hidden');
+    } else {
+      mostrarEstadoLogin('Este correo ya está registrado. Inicia sesión.', 'error');
+    }
+    return;
+  }
+  if (mensaje.includes('rate limit') || mensaje.includes('too many')) {
+    mostrarEstadoLogin('Demasiados intentos de registro. Espera unos minutos y vuelve a intentarlo.', 'error');
+    return;
+  }
+  mostrarEstadoLogin(error?.message || 'No se pudo registrar el usuario.', 'error');
 }
 
 function mostrarFormularioRecuperacion(mostrar) {
@@ -158,18 +198,6 @@ async function actualizarPassword(event) {
   await supabaseClient.auth.signOut();
 }
 
-async function verificarEstadoCorreoYActualizarBoton() {
-  const boton = document.querySelector('.login-submit');
-  const correo = document.getElementById('login-email')?.value.trim().toLowerCase();
-  if (!boton || !correo || !esCorreoInstitucional(correo) || !supabaseConfigurado()) {
-    if (boton) boton.textContent = 'Registrar usuario';
-    return;
-  }
-
-  boton.textContent = 'Iniciar sesión';
-  document.getElementById('login-register-link')?.removeAttribute('hidden');
-}
-
 async function iniciarSesionEstudiante(event) {
   event.preventDefault();
   const formulario = event.currentTarget;
@@ -189,11 +217,6 @@ async function iniciarSesionEstudiante(event) {
 
   if (!supabaseConfigurado()) {
     mostrarEstadoLogin('Configura Supabase en supabase-config.js para activar el acceso.', 'error');
-    return;
-  }
-
-  if (formulario.querySelector('.login-submit')?.textContent === 'Registrar usuario') {
-    await registrarCuentaDesdeLogin(correo, password, boton);
     return;
   }
 
@@ -265,7 +288,7 @@ async function iniciarSesionEstudiante(event) {
 async function registrarCuentaDesdeLogin(correo, password, boton) {
   boton.disabled = true;
   mostrarEstadoLogin('Registrando usuario...');
-  const { error } = await supabaseClient.auth.signUp({
+  const { data, error } = await supabaseClient.auth.signUp({
     email: correo,
     password,
     options: { emailRedirectTo: obtenerUrlRedireccion() },
@@ -273,24 +296,15 @@ async function registrarCuentaDesdeLogin(correo, password, boton) {
   boton.disabled = false;
 
   if (error) {
-    const mensaje = error.message?.toLowerCase() || '';
-    if (mensaje.includes('already registered') || mensaje.includes('already been registered')) {
-      boton.textContent = 'Iniciar sesión';
-      mostrarEstadoLogin('Este correo ya está registrado. Inicia sesión.', 'error');
-      return;
-    }
-    if (mensaje.includes('rate limit') || mensaje.includes('too many')) {
-      mostrarEstadoLogin(
-        'Demasiados intentos de registro. Espera unos minutos y confirma el correo recibido antes de volver a intentarlo.',
-        'error'
-      );
-      return;
-    }
-    mostrarEstadoLogin(error.message || 'No se pudo registrar el usuario.', 'error');
+    mostrarErrorRegistro(error, boton, true);
     return;
   }
 
-  mostrarEstadoLogin('Usuario registrado. Confirma tu correo y luego inicia sesión.', 'success');
+  if (data.session) await supabaseClient.auth.signOut();
+  const mensaje = data.session
+    ? 'Usuario registrado. Ya puedes iniciar sesión.'
+    : 'Usuario registrado. Revisa tu correo y spam para confirmar la cuenta.';
+  mostrarEstadoLogin(mensaje, 'success');
   boton.textContent = 'Iniciar sesión';
 }
 
@@ -369,31 +383,29 @@ async function registrarEstudiante(event) {
     mostrarEstadoLogin('La contraseña debe tener al menos 8 caracteres.', 'error');
     return;
   }
+  if (!supabaseConfigurado()) {
+    mostrarEstadoLogin('Configura Supabase para activar el registro.', 'error');
+    return;
+  }
   boton.disabled = true;
-  const { error } = await supabaseClient.auth.signUp({
+  const { data, error } = await supabaseClient.auth.signUp({
     email: correo,
     password,
     options: { emailRedirectTo: obtenerUrlRedireccion() },
   });
   boton.disabled = false;
   if (error) {
-    const mensaje = error.message?.toLowerCase() || '';
-    if (mensaje.includes('rate limit') || mensaje.includes('too many')) {
-      mostrarEstadoLogin(
-        'Demasiados intentos de registro. Espera unos minutos y revisa tu correo de confirmación.',
-        'error'
-      );
-    } else if (mensaje.includes('already registered') || mensaje.includes('already been registered')) {
-      mostrarFormularioRegistro(false);
-      mostrarEstadoLogin('Este correo ya está registrado. Confirma el correo y vuelve a iniciar sesión.', 'error');
-      document.getElementById('login-confirm-resend-link')?.removeAttribute('hidden');
-    } else {
-      mostrarEstadoLogin(error.message || 'No se pudo crear la cuenta.', 'error');
-    }
+    mostrarErrorRegistro(error, boton);
     return;
   }
+  if (data.session) await supabaseClient.auth.signOut();
   mostrarFormularioRegistro(false);
-  mostrarEstadoLogin('Registro creado. Confirma tu correo y luego inicia sesión.', 'success');
+  document.getElementById('login-email').value = correo;
+  document.getElementById('login-password')?.focus();
+  const mensaje = data.session
+    ? 'Registro creado. Ya puedes iniciar sesión.'
+    : 'Registro creado. Revisa tu correo y spam para confirmar la cuenta.';
+  mostrarEstadoLogin(mensaje, 'success');
   formulario.reset();
 }
 
@@ -579,6 +591,36 @@ function actualizarPerfilEstudiante(perfil) {
   datos.append(nombre, dni, seccion);
 }
 
+function actualizarEnlacePerfil(elemento, user, movil = false) {
+  if (!elemento) return;
+  elemento.replaceChildren();
+
+  if (!user) {
+    elemento.textContent = movil ? '🔐 Acceso estudiante' : 'Acceso estudiante';
+    return;
+  }
+
+  const avatar = document.createElement('span');
+  avatar.className = 'profile-nav-avatar';
+  const foto = user.user_metadata?.avatar_url || user.user_metadata?.picture;
+  if (foto) {
+    const imagen = document.createElement('img');
+    imagen.src = foto;
+    imagen.alt = '';
+    imagen.referrerPolicy = 'no-referrer';
+    imagen.addEventListener('error', () => {
+      avatar.textContent = (user.email || '?').charAt(0).toUpperCase();
+    }, { once: true });
+    avatar.appendChild(imagen);
+  } else {
+    avatar.textContent = (user.email || '?').charAt(0).toUpperCase();
+  }
+
+  const texto = document.createElement('span');
+  texto.textContent = 'Mi perfil';
+  elemento.append(avatar, texto);
+}
+
 function actualizarSesionEstudiante(session, perfil = estudiantePerfil) {
   estudianteSession = session;
   estudiantePerfil = session?.user ? perfil : null;
@@ -597,15 +639,15 @@ function actualizarSesionEstudiante(session, perfil = estudiantePerfil) {
   });
 
   if (session?.user) {
-    if (acceso) acceso.textContent = 'Mi área';
-    if (accesoMovil) accesoMovil.textContent = '🔐 Mi área';
+    actualizarEnlacePerfil(acceso, session.user);
+    actualizarEnlacePerfil(accesoMovil, session.user, true);
     if (usuario) usuario.textContent = session.user.email;
     if (saludo) saludo.textContent = `Sesión activa: ${session.user.email}`;
     actualizarPerfilEstudiante(estudiantePerfil);
     if (botonSesion) botonSesion.textContent = 'Cerrar sesión';
   } else {
-    if (acceso) acceso.textContent = 'Acceso estudiante';
-    if (accesoMovil) accesoMovil.textContent = '🔐 Acceso estudiante';
+    actualizarEnlacePerfil(acceso, null);
+    actualizarEnlacePerfil(accesoMovil, null, true);
     if (usuario) usuario.textContent = '';
     if (saludo) saludo.textContent = '';
     actualizarPerfilEstudiante(null);
@@ -722,9 +764,6 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('login-email').value;
     document.getElementById('recovery-email').focus();
   });
-  document.getElementById('login-email')?.addEventListener('blur', verificarEstadoCorreoYActualizarBoton);
-  document.getElementById('login-email')?.addEventListener('change', verificarEstadoCorreoYActualizarBoton);
-
   document.getElementById('login-close')?.addEventListener('click', cerrarLogin);
   document.getElementById('login-password-toggle')?.addEventListener('click', (event) => {
     const boton = event.currentTarget;

@@ -21,8 +21,8 @@
   --dark: #1a1a1a;
   --gray: #6b7280;
   --gray-light: #f3f4f6;
-  --font-title: 'Poppins', sans-serif;
-  --font-body: 'Inter', sans-serif;
+  --font-title: 'Trebuchet MS', 'Segoe UI', sans-serif;
+  --font-body: 'Segoe UI', Arial, sans-serif;
 }
 /* Accessibility: screen-reader only text */
 .sr-only {
@@ -134,6 +134,31 @@ body {
 .nav-links a:hover {
   background: rgba(255, 255, 255, 0.15);
   color: var(--white);
+}
+.profile-nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+.profile-nav-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 25px;
+  height: 25px;
+  flex: 0 0 25px;
+  overflow: hidden;
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  background: var(--navy);
+  color: var(--gold-light);
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+.profile-nav-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 .nav-submenu {
   position: absolute;
@@ -257,6 +282,9 @@ body {
 }
 .mobile-menu a:hover {
   background: rgba(255, 255, 255, 0.1);
+}
+.mobile-menu .profile-nav-link {
+  gap: 0.6rem;
 }
 .mobile-submenu {
   display: flex;
@@ -2286,12 +2314,16 @@ footer {
 .login-modal {
   position: relative;
   width: min(100%, 460px);
+  max-height: calc(100dvh - 2rem);
   padding: 2.5rem;
   background: white;
   border: 1px solid rgba(19, 40, 72, 0.1);
   border-radius: 4px;
   box-shadow: 0 24px 70px rgba(0, 0, 0, 0.3);
   animation: loginPop 0.25s ease;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scroll-padding-bottom: 1.5rem;
 }
 .login-modal::before {
   content: '';
@@ -2539,15 +2571,15 @@ footer {
   color: #237a45;
 }
 
-/* OTP Verification Form - Modern GitHub Style */
+/* OTP Verification Form */
 .otp-form-modern {
   position: relative;
-  width: min(100%, 500px);
+  width: 100%;
   padding: 0;
-  background: linear-gradient(135deg, #1a1f35 0%, #0f1419 100%);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #fff;
+  border: 1px solid #e6e9ef;
   border-radius: 12px;
-  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  box-shadow: 0 14px 35px rgba(19, 40, 72, 0.12);
   animation: loginPop 0.25s ease;
   overflow: hidden;
 }
@@ -2562,10 +2594,10 @@ footer {
 
 .otp-header {
   position: relative;
-  padding: 2.5rem 2.5rem 1.5rem;
+  padding: 1.75rem 1.5rem 1.35rem;
   text-align: center;
-  background: linear-gradient(135deg, rgba(196, 30, 58, 0.1) 0%, rgba(201, 168, 76, 0.05) 100%);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(135deg, #fff8f5 0%, #f5f7fb 100%);
+  border-bottom: 1px solid #e8ebf0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -2574,42 +2606,41 @@ footer {
 
 .otp-title {
   font-family: var(--font-title);
-  color: #ffffff;
-  font-size: 1.85rem;
+  color: var(--navy);
+  font-size: 1.55rem;
   font-weight: 700;
   line-height: 1.2;
   margin: 0;
-  letter-spacing: -0.5px;
 }
 
 .otp-icon {
   width: 56px;
   height: 56px;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--red);
   stroke-width: 1.5;
   flex-shrink: 0;
 }
 
 .otp-content {
-  padding: 2.5rem;
+  padding: 1.75rem 1.5rem 1.5rem;
 }
 
 .otp-message {
   font-size: 1rem;
-  color: #e0e0e0;
+  color: var(--navy);
   line-height: 1.6;
   margin-bottom: 0.75rem;
   text-align: center;
 }
 
 .otp-message strong {
-  color: #ffffff;
+  color: var(--red);
   font-weight: 600;
 }
 
 .otp-submessage {
   font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--gray);
   text-align: center;
   margin-bottom: 2rem;
   line-height: 1.5;
@@ -2625,17 +2656,17 @@ footer {
 .otp-label {
   font-size: 0.85rem;
   font-weight: 600;
-  color: #e0e0e0;
+  color: var(--navy);
   display: block;
 }
 
 .otp-input {
   width: 100%;
   padding: 0.95rem 1.2rem;
-  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  border: 1.5px solid #d7dce5;
   border-radius: 6px;
-  background: rgba(255, 255, 255, 0.05);
-  color: #ffffff;
+  background: #f8fafc;
+  color: var(--navy);
   font-size: 1.1rem;
   font-family: 'Courier New', monospace;
   font-weight: 600;
@@ -2643,23 +2674,22 @@ footer {
   text-align: center;
   outline: none;
   transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
 }
 
 .otp-input::placeholder {
-  color: rgba(255, 255, 255, 0.3);
+  color: #9aa3b2;
 }
 
 .otp-input:focus {
   border-color: var(--red);
-  background: rgba(255, 255, 255, 0.08);
-  box-shadow: 0 0 0 3px rgba(196, 30, 58, 0.2);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(196, 30, 58, 0.12);
 }
 
 .otp-input:autofill,
 .otp-input:-webkit-autofill {
-  -webkit-box-shadow: 0 0 0 1000px rgba(255, 255, 255, 0.05) inset;
-  -webkit-text-fill-color: #ffffff;
+  -webkit-box-shadow: 0 0 0 1000px #f8fafc inset;
+  -webkit-text-fill-color: var(--navy);
 }
 
 .otp-submit-btn {
@@ -2667,33 +2697,33 @@ footer {
   padding: 0.9rem 1.5rem;
   border: none;
   border-radius: 6px;
-  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+  background: linear-gradient(135deg, var(--red) 0%, #8f162c 100%);
   color: white;
   font-size: 1rem;
   font-weight: 700;
   font-family: var(--font-title);
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.25);
+  box-shadow: 0 4px 12px rgba(196, 30, 58, 0.2);
   letter-spacing: 0.5px;
   margin-bottom: 1rem;
 }
 
 .otp-submit-btn:hover {
-  background: linear-gradient(135deg, #56c765 0%, #4caf50 100%);
-  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.35);
+  background: linear-gradient(135deg, #d52b48 0%, var(--red) 100%);
+  box-shadow: 0 6px 20px rgba(196, 30, 58, 0.3);
   transform: translateY(-2px);
 }
 
 .otp-submit-btn:active {
   transform: translateY(0);
-  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.25);
+  box-shadow: 0 2px 8px rgba(196, 30, 58, 0.2);
 }
 
 .otp-submit-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.1);
+  box-shadow: 0 4px 12px rgba(196, 30, 58, 0.1);
 }
 
 .otp-footer {
@@ -2703,7 +2733,7 @@ footer {
 .otp-resend-btn {
   background: none;
   border: none;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--gray);
   font-size: 0.85rem;
   cursor: pointer;
   text-decoration: none;
@@ -2713,12 +2743,12 @@ footer {
 }
 
 .otp-resend-btn:hover {
-  color: #ffffff;
+  color: var(--red);
   text-decoration: underline;
 }
 
 .otp-resend-btn:disabled {
-  color: rgba(255, 255, 255, 0.3);
+  color: #9aa3b2;
   cursor: not-allowed;
   text-decoration: none;
 }
@@ -2750,6 +2780,10 @@ footer {
   }
 }
 @media (max-width: 600px) {
+  .login-overlay {
+    align-items: flex-start;
+    padding: 0.75rem;
+  }
   .student-area-section {
     padding: 3.5rem 1rem;
   }
@@ -2765,6 +2799,77 @@ footer {
     min-width: 0;
   }
   .login-modal {
-    padding: 2.25rem 1.25rem 1.5rem;
+    width: 100%;
+    max-height: calc(100dvh - 1.5rem);
+    padding: 2.25rem 1rem 1.25rem;
+  }
+  .otp-header {
+    padding: 1.35rem 1rem 1rem;
+  }
+  .otp-title {
+    font-size: 1.3rem;
+  }
+  .otp-icon {
+    width: 42px;
+    height: 42px;
+  }
+  .otp-content {
+    padding: 1.25rem 1rem 1rem;
+  }
+  .otp-message {
+    font-size: 0.92rem;
+  }
+  .otp-submessage {
+    margin-bottom: 1.35rem;
+  }
+  .otp-input-group {
+    margin-bottom: 1.25rem;
+  }
+}
+
+@media (max-width: 600px) and (max-height: 700px) {
+  .login-overlay {
+    align-items: flex-start;
+    padding: 0.4rem;
+  }
+
+  .login-modal {
+    max-height: calc(100dvh - 0.8rem);
+    padding-top: 1.5rem;
+  }
+
+  .login-brand {
+    margin-bottom: 0.75rem;
+  }
+
+  .login-crest {
+    width: 44px;
+    height: 44px;
+  }
+
+  .login-intro {
+    margin-bottom: 1rem;
+  }
+
+  .otp-header {
+    gap: 0.7rem;
+    padding: 1rem;
+  }
+
+  .otp-content {
+    padding: 1rem;
+  }
+
+  .otp-submessage {
+    margin-bottom: 1rem;
+  }
+
+  .otp-input-group {
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+  }
+
+  .otp-submit-btn {
+    margin-bottom: 0.5rem;
   }
 }

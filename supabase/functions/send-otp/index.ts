@@ -6,6 +6,7 @@ const SUPABASE_ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY")!
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY")
 const RESEND_FROM_EMAIL = Deno.env.get("RESEND_FROM_EMAIL") || "noreply@mariscalcastilla.edu.pe"
+const PORTAL_LOGO_URL = Deno.env.get("PORTAL_LOGO_URL") || "https://raw.githubusercontent.com/Nakame-Akame/I.E-Mariscal-Castilla/main/img/mc.png"
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
@@ -68,8 +69,32 @@ serve(async (req: Request) => {
       body: JSON.stringify({
         from: RESEND_FROM_EMAIL,
         to: authData.user.email,
-        subject: "Código de verificación - Portal Estudiantes",
-        html: `<div style="font-family:Arial,sans-serif;max-width:600px;margin:auto"><h1 style="color:#c41e3a">Verificación de acceso</h1><p>Tu código de verificación es:</p><p style="font-size:32px;font-weight:bold;letter-spacing:8px;text-align:center">${code}</p><p>Caduca en 10 minutos y solo puede usarse una vez.</p><p>Si no solicitaste este acceso, ignora este mensaje.</p></div>`,
+        subject: "Tu código de verificación | Portal estudiantil",
+        html: `
+          <div style="margin:0;padding:32px 16px;background:#f4f6f8;font-family:Arial,Helvetica,sans-serif;color:#17233b;">
+            <div style="max-width:560px;margin:0 auto;background:#ffffff;border:1px solid #e1e5eb;border-radius:8px;overflow:hidden;">
+              <div style="height:5px;background:linear-gradient(90deg,#a90016 0%,#d2ad45 50%,#0b2445 100%);"></div>
+              <div style="padding:32px 36px 8px;text-align:center;">
+                <img src="${PORTAL_LOGO_URL}" width="72" height="72" alt="IEP Mariscal Castilla" style="display:block;width:72px;height:72px;object-fit:contain;margin:0 auto 18px;">
+                <p style="margin:0;color:#a90016;font-size:12px;font-weight:bold;letter-spacing:1.5px;text-transform:uppercase;">Portal estudiantil</p>
+                <h1 style="margin:8px 0 0;color:#17233b;font-size:25px;line-height:1.25;">Verificación de acceso</h1>
+              </div>
+              <div style="padding:20px 36px 32px;">
+                <p style="margin:0 0 18px;font-size:15px;line-height:1.6;">Usa el siguiente código para confirmar tu identidad y acceder al portal:</p>
+                <div style="margin:24px 0;padding:20px 12px;background:#f8f9fb;border:1px solid #e1e5eb;border-radius:6px;text-align:center;">
+                  <span style="color:#17233b;font-size:34px;font-weight:bold;letter-spacing:9px;line-height:1;">${code}</span>
+                </div>
+                <p style="margin:0;text-align:center;color:#5d6878;font-size:13px;line-height:1.5;">Este código vence en <strong style="color:#17233b;">10 minutos</strong> y solo puede utilizarse una vez.</p>
+                <div style="margin:28px 0 0;padding:14px 16px;border-left:3px solid #d2ad45;background:#fffaf0;color:#5d6878;font-size:12px;line-height:1.55;">
+                  Si no solicitaste este código, puedes ignorar este mensaje. Tu cuenta permanece protegida.
+                </div>
+              </div>
+              <div style="padding:20px 36px;background:#f8f9fb;border-top:1px solid #e8ebf0;text-align:center;">
+                <p style="margin:0;color:#5d6878;font-size:12px;line-height:1.5;">IEP Mariscal Castilla<br>Huancayo, Junín</p>
+              </div>
+            </div>
+          </div>
+        `,
       }),
     })
     if (!emailResponse.ok) {
