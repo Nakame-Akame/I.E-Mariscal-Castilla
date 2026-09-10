@@ -310,9 +310,7 @@ async function registrarCuentaDesdeLogin(correo, password, boton) {
 
 async function enviarCodigoOtp(userId) {
   try {
-    const { error } = await supabaseClient.functions.invoke('send-otp', {
-      body: { user_id: userId },
-    });
+    const { error } = await invocarFuncionSupabase(supabaseClient, 'send-otp', { user_id: userId });
     if (error) throw error;
     return true;
   } catch (error) {
@@ -342,12 +340,18 @@ async function verificarOtp(event) {
     return;
   }
   boton.disabled = true;
-  const { data, error } = await supabaseClient.functions.invoke('verify-otp', {
-    body: { user_id: otpUsuarioPendiente, code: codigo },
+  const { data, error } = await invocarFuncionSupabase(supabaseClient, 'verify-otp', {
+    user_id: otpUsuarioPendiente,
+    code: codigo,
   });
   boton.disabled = false;
   if (error || !data?.success) {
-    mostrarEstadoLogin(data?.error || 'El código no es válido o ha expirado.', 'error');
+    let detalle = data?.error || '';
+    if (!detalle && error?.context?.clone) {
+      const respuesta = await error.context.clone().json().catch(() => null);
+      detalle = respuesta?.error || '';
+    }
+    mostrarEstadoLogin(detalle || 'El código no es válido o ha expirado.', 'error');
     return;
   }
   sessionStorage.setItem('otp_verificado_user_id', otpUsuarioPendiente);
@@ -410,11 +414,7 @@ async function registrarEstudiante(event) {
 }
 
 async function obtenerSolicitudAcceso(correo) {
-  const { data, error } = await supabaseClient
-    .from('solicitudes_acceso')
-    .select('estado')
-    .eq('email', correo)
-    .maybeSingle();
+  const { data, error } = await consultarSolicitudAcceso(supabaseClient, correo);
 
   if (error) {
     console.error('No se pudo verificar la solicitud de acceso:', error);
@@ -431,11 +431,9 @@ async function sesionEstaAprobada(session) {
 
 async function enviarEmailAdmision(nombre, correo) {
   try {
-    const { error } = await supabaseClient.functions.invoke('enviar-email-admision', {
-      body: {
-        nombre,
-        correo,
-      },
+    const { error } = await invocarFuncionSupabase(supabaseClient, 'enviar-email-admision', {
+      nombre,
+      correo,
     });
     if (error) throw error;
     return true;
@@ -460,7 +458,7 @@ async function enviarEmailAdmision(nombre, correo) {
   }
 
   boton.disabled = true;
-  const { error } = await supabaseClient.from('solicitudes_acceso').insert({
+  const { error } = await insertarSolicitudAcceso(supabaseClient, {
     nombre: nombre,
     email: correo,
     rol: document.getElementById('access-request-role').value,
@@ -486,12 +484,7 @@ async function cerrarSesionEstudiante() {
 }
 
 async function cargarPerfilEstudiante(correo) {
-  const { data, error } = await supabaseClient
-    .from('estudiantes')
-    .select('id, dni, apellidos, nombres, seccion, email, activo')
-    .ilike('email', correo.trim())
-    .eq('activo', true)
-    .maybeSingle();
+  const { data, error } = await consultarEstudiante(supabaseClient, correo);
 
   if (error) {
     console.error('No se pudo consultar el perfil del estudiante:', error);
@@ -510,12 +503,7 @@ async function cargarPerfilAcceso(correo) {
   const perfilEstudiante = await cargarPerfilEstudiante(correo);
   if (perfilEstudiante) return perfilEstudiante;
 
-  const { data, error } = await supabaseClient
-    .from('usuarios_acceso')
-    .select('id, nombres, apellidos, email, rol, activo')
-    .ilike('email', correo.trim())
-    .eq('activo', true)
-    .maybeSingle();
+  const { data, error } = await consultarUsuarioAcceso(supabaseClient, correo);
 
   if (error) {
     console.error('No se pudo consultar el acceso del usuario:', error);
@@ -535,10 +523,7 @@ async function cargarContenidoRestringido() {
   if (!contenedor || !supabaseClient) return;
 
   contenedor.textContent = 'Cargando contenido...';
-  const { data, error } = await supabaseClient
-    .from('contenido_restringido')
-    .select('id, titulo, contenido, area, created_at')
-    .order('created_at', { ascending: false });
+  const { data, error } = await consultarContenidoRestringido(supabaseClient);
 
   if (error) {
     console.error('No se pudo consultar el contenido restringido:', error);
@@ -668,10 +653,7 @@ async function inicializarAutenticacion() {
 
   if (!supabaseConfigurado()) return;
 
-  supabaseClient = window.supabase.createClient(
-    window.SUPABASE_CONFIG.url,
-    window.SUPABASE_CONFIG.anonKey
-  );
+  supabaseClient = crearClienteSupabase();
 
   const { data } = await supabaseClient.auth.getSession();
 

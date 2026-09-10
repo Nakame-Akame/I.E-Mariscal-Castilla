@@ -1,0 +1,620 @@
+<!-- ===== PAGE: AREAS CURRICULARES ===== -->
+    <div class="page" id="page-areas-curriculares">
+      <div
+        class="subpage-hero"
+        style="
+          background: linear-gradient(135deg, var(--navy) 0%, #1a3a6e 50%, var(--red-dark) 100%);
+        "
+      >
+        <div class="breadcrumb">
+          <a href="#" onclick="navigate('home')">Inicio</a> / Áreas Curriculares
+        </div>
+        <h1>Áreas Curriculares</h1>
+        <p>
+          Las 11 áreas del Currículo Nacional desarrolladas con excelencia en la IE Mariscal
+          Castilla
+        </p>
+      </div>
+      <section style="padding: 5rem 2rem; background: white">
+        <div class="container">
+          <div class="section-header center" style="margin-bottom: 3rem">
+            <div class="section-tag">Currículo Nacional</div>
+            <h2 class="section-title">Nuestras <span>Áreas Curriculares</span></h2>
+            <p class="section-desc">
+              Cada área cuenta con docentes especializados, materiales didácticos actualizados y
+              espacios equipados para un aprendizaje de calidad.
+            </p>
+          </div>
+          <div
+            style="
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+              gap: 2rem;
+            "
+          >
+            <div
+              style="
+                background: var(--gray-light);
+                border-radius: 16px;
+                padding: 2rem;
+                border-left: 5px solid var(--red);
+                transition: all 0.3s;
+                cursor: pointer;
+              "
+              onclick="showDocentes('comunicacion')"
+              onmouseover="
+                this.style.transform = 'translateY(-4px)';
+                this.style.boxShadow = '0 12px 40px rgba(0,0,0,0.1)';
+              "
+              onmouseout="
+                this.style.transform = '';
+                this.style.boxShadow = '';
+              "
+            >
+              <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem">
+                <div
+                  style="
+                    width: 52px;
+                    height: 52px;
+                    background: var(--red);
+                    border-radius: 12px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 24px;
+                    flex-shrink: 0;
+                  "
+                >
+                  📖
+                </div>
+                <h3
+                  style="
+                    font-family: var(--font-title);
+                    font-size: 1.1rem;
+                    font-weight: 700;
+                    color: var(--navy);
+                  "
+                >
+                  Comunicación
+                </h3>
+              </div>
+              <p style="color: #4b5563; font-size: 14px; line-height: 1.8">
+                Desarrolla competencias de comprensión y producción de textos orales y escritos,
+                expresión literaria y uso de lenguajes no verbales. Fomentamos la lectura crítica y
+                el pensamiento reflexivo en nuestros estudiantes.
+              </p>
+            </div>
+
+            <div
+              style="
+                background: var(--gray-light);
+                border-radius: 16px;
+                padding: 2rem;
+                border-left: 5px solid #1565c0;
+                transition: all 0.3s;
+                cursor: pointer;
+              "
+              onclick="showDocentes('ingles')"
+              onmouseover="
+                this.style.transform = 'translateY(-4px)';
+                this.style.boxShadow = '0 12px 40px rgba(0,0,0,0.1)';
+              "
+              onmouseout="
+                this.style.transform = '';
+                this.style.boxShadow = '';
+              "
+            >
+              <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem">
+                <div
+                  style="
+                    width: 52px;
+                    height: 52px;
+                    background: #1565c0;
+                    border-radius: 12px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 24px;
+                    flex-shrink: 0;
+                  "
+                >
+                  🌎
+                </div>
+                <h3
+                  style="
+                    font-family: var(--font-title);
+                    font-size: 1.1rem;
+                    font-weight: 700;
+                    color: var(--navy);
+                  "
+                >
+                  Inglés como Lengua Extranjera
+                </h3>
+              </div>
+              <p style="color: #4b5563; font-size: 14px; line-height: 1.8">
+                Formamos comunicadores competentes en inglés con metodología basada en el Marco
+                Común Europeo de Referencia (CEFR). Al egresar, nuestros estudiantes alcanzan el
+                nivel B1-B2, abriendo puertas a oportunidades globales.
+              </p>
+            </div>
+
+            <div
+              style="
+                background: var(--gray-light);
+                border-radius: 16px;
+                padding: 2rem;
+                border-left: 5px solid #7b1fa2;
+                transition: all 0.3s;
+                cursor: pointer;
+              "
+              onclick="showDocentes('matematica')"
+              onmouseover="
+                this.style.transform = 'translateY(-4px)';
+                this.style.boxShadow = '0 12px 40px rgba(0,0,0,0.1)';
+              "
+              onmouseout="
+                this.style.transform = '';
+                this.style.boxShadow = '';
+              "
+            >
+              <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem">
+                <div
+                  style="
+                    width: 52px;
+                    height: 52px;
+                    background: #7b1fa2;
+                    border-radius: 12px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 24px;
+                    flex-shrink: 0;
+                  "
+                >
+                  🔢
+                </div>
+                <h3
+                  style="
+                    font-family: var(--font-title);
+                    font-size: 1.1rem;
+                    font-weight: 700;
+                    color: var(--navy);
+                  "
+                >
+                  Matemática
+                </h3>
+              </div>
+              <p style="color: #4b5563; font-size: 14px; line-height: 1.8">
+                Desarrollamos el razonamiento lógico, la resolución de problemas y el pensamiento
+                algebraico, estadístico y geométrico. Nuestros estudiantes destacan en olimpiadas
+                matemáticas a nivel regional y nacional.
+              </p>
+            </div>
+
+            <div
+              style="
+                background: var(--gray-light);
+                border-radius: 16px;
+                padding: 2rem;
+                border-left: 5px solid #e65100;
+                transition: all 0.3s;
+                cursor: pointer;
+              "
+              onclick="showDocentes('arte')"
+              onmouseover="
+                this.style.transform = 'translateY(-4px)';
+                this.style.boxShadow = '0 12px 40px rgba(0,0,0,0.1)';
+              "
+              onmouseout="
+                this.style.transform = '';
+                this.style.boxShadow = '';
+              "
+            >
+              <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem">
+                <div
+                  style="
+                    width: 52px;
+                    height: 52px;
+                    background: #e65100;
+                    border-radius: 12px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 24px;
+                    flex-shrink: 0;
+                  "
+                >
+                  🎨
+                </div>
+                <h3
+                  style="
+                    font-family: var(--font-title);
+                    font-size: 1.1rem;
+                    font-weight: 700;
+                    color: var(--navy);
+                  "
+                >
+                  Arte y Cultura
+                </h3>
+              </div>
+              <p style="color: #4b5563; font-size: 14px; line-height: 1.8">
+                Estimulamos la sensibilidad estética y la expresión creativa mediante las artes
+                visuales, música, danza y teatro. Valoramos la identidad cultural andina y
+                promovemos el arte como medio de comunicación.
+              </p>
+            </div>
+
+            <div
+              style="
+                background: var(--gray-light);
+                border-radius: 16px;
+                padding: 2rem;
+                border-left: 5px solid #2e7d32;
+                transition: all 0.3s;
+                cursor: pointer;
+              "
+              onclick="showDocentes('sociales')"
+              onmouseover="
+                this.style.transform = 'translateY(-4px)';
+                this.style.boxShadow = '0 12px 40px rgba(0,0,0,0.1)';
+              "
+              onmouseout="
+                this.style.transform = '';
+                this.style.boxShadow = '';
+              "
+            >
+              <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem">
+                <div
+                  style="
+                    width: 52px;
+                    height: 52px;
+                    background: #2e7d32;
+                    border-radius: 12px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 24px;
+                    flex-shrink: 0;
+                  "
+                >
+                  🌏
+                </div>
+                <h3
+                  style="
+                    font-family: var(--font-title);
+                    font-size: 1.1rem;
+                    font-weight: 700;
+                    color: var(--navy);
+                  "
+                >
+                  Ciencias Sociales
+                </h3>
+              </div>
+              <p style="color: #4b5563; font-size: 14px; line-height: 1.8">
+                Construimos conciencia histórica, pensamiento crítico y comprensión del espacio
+                geográfico. Estudiamos la historia del Perú y el mundo, economía, y las dinámicas
+                sociales que moldean nuestra sociedad.
+              </p>
+            </div>
+
+            <div
+              style="
+                background: var(--gray-light);
+                border-radius: 16px;
+                padding: 2rem;
+                border-left: 5px solid #00838f;
+                transition: all 0.3s;
+                cursor: pointer;
+              "
+              onclick="showDocentes('dpcc')"
+              onmouseover="
+                this.style.transform = 'translateY(-4px)';
+                this.style.boxShadow = '0 12px 40px rgba(0,0,0,0.1)';
+              "
+              onmouseout="
+                this.style.transform = '';
+                this.style.boxShadow = '';
+              "
+            >
+              <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem">
+                <div
+                  style="
+                    width: 52px;
+                    height: 52px;
+                    background: #00838f;
+                    border-radius: 12px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 24px;
+                    flex-shrink: 0;
+                  "
+                >
+                  🤝
+                </div>
+                <h3
+                  style="
+                    font-family: var(--font-title);
+                    font-size: 1.1rem;
+                    font-weight: 700;
+                    color: var(--navy);
+                  "
+                >
+                  Desarrollo Personal, Ciudadanía y Cívica
+                </h3>
+              </div>
+              <p style="color: #4b5563; font-size: 14px; line-height: 1.8">
+                Fortalecemos la identidad personal, la autoestima y la capacidad de convivencia
+                democrática. Formamos ciudadanos íntegros, con pleno ejercicio de sus derechos y
+                cumplimiento de sus deberes.
+              </p>
+            </div>
+
+            <div
+              style="
+                background: var(--gray-light);
+                border-radius: 16px;
+                padding: 2rem;
+                border-left: 5px solid #d32f2f;
+                transition: all 0.3s;
+                cursor: pointer;
+              "
+              onclick="showDocentes('fisica')"
+              onmouseover="
+                this.style.transform = 'translateY(-4px)';
+                this.style.boxShadow = '0 12px 40px rgba(0,0,0,0.1)';
+              "
+              onmouseout="
+                this.style.transform = '';
+                this.style.boxShadow = '';
+              "
+            >
+              <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem">
+                <div
+                  style="
+                    width: 52px;
+                    height: 52px;
+                    background: #d32f2f;
+                    border-radius: 12px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 24px;
+                    flex-shrink: 0;
+                  "
+                >
+                  ⚽
+                </div>
+                <h3
+                  style="
+                    font-family: var(--font-title);
+                    font-size: 1.1rem;
+                    font-weight: 700;
+                    color: var(--navy);
+                  "
+                >
+                  Educación Física
+                </h3>
+              </div>
+              <p style="color: #4b5563; font-size: 14px; line-height: 1.8">
+                Promovemos el desarrollo motor, la salud física y el bienestar integral. Contamos
+                con estadio propio, piscina semiolímpica y múltiples canchas deportivas. Entrenamos
+                campeones regionales en fútbol, natación y atletismo.
+              </p>
+            </div>
+
+            <div
+              style="
+                background: var(--gray-light);
+                border-radius: 16px;
+                padding: 2rem;
+                border-left: 5px solid #c9a84c;
+                transition: all 0.3s;
+                cursor: pointer;
+              "
+              onclick="showDocentes('religion')"
+              onmouseover="
+                this.style.transform = 'translateY(-4px)';
+                this.style.boxShadow = '0 12px 40px rgba(0,0,0,0.1)';
+              "
+              onmouseout="
+                this.style.transform = '';
+                this.style.boxShadow = '';
+              "
+            >
+              <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem">
+                <div
+                  style="
+                    width: 52px;
+                    height: 52px;
+                    background: #c9a84c;
+                    border-radius: 12px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 24px;
+                    flex-shrink: 0;
+                  "
+                >
+                  🙏
+                </div>
+                <h3
+                  style="
+                    font-family: var(--font-title);
+                    font-size: 1.1rem;
+                    font-weight: 700;
+                    color: var(--navy);
+                  "
+                >
+                  Educación Religiosa
+                </h3>
+              </div>
+              <p style="color: #4b5563; font-size: 14px; line-height: 1.8">
+                Cultivamos la dimensión espiritual y el desarrollo ético-moral de nuestros
+                estudiantes desde una perspectiva cristiana y humanista, fomentando el respeto por
+                todas las creencias y la solidaridad con el prójimo.
+              </p>
+            </div>
+
+            <div
+              style="
+                background: var(--gray-light);
+                border-radius: 16px;
+                padding: 2rem;
+                border-left: 5px solid #0277bd;
+                transition: all 0.3s;
+                cursor: pointer;
+              "
+              onclick="showDocentes('ciencia')"
+              onmouseover="
+                this.style.transform = 'translateY(-4px)';
+                this.style.boxShadow = '0 12px 40px rgba(0,0,0,0.1)';
+              "
+              onmouseout="
+                this.style.transform = '';
+                this.style.boxShadow = '';
+              "
+            >
+              <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem">
+                <div
+                  style="
+                    width: 52px;
+                    height: 52px;
+                    background: #0277bd;
+                    border-radius: 12px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 24px;
+                    flex-shrink: 0;
+                  "
+                >
+                  🔬
+                </div>
+                <h3
+                  style="
+                    font-family: var(--font-title);
+                    font-size: 1.1rem;
+                    font-weight: 700;
+                    color: var(--navy);
+                  "
+                >
+                  Ciencia y Tecnología
+                </h3>
+              </div>
+              <p style="color: #4b5563; font-size: 14px; line-height: 1.8">
+                Desarrollamos la indagación científica y el pensamiento crítico mediante el trabajo
+                experimental en nuestros laboratorios de Biología, Química y Física, equipados con
+                microscopios, modelos anatómicos y material especializado.
+              </p>
+            </div>
+
+            <div
+              style="
+                background: var(--gray-light);
+                border-radius: 16px;
+                padding: 2rem;
+                border-left: 5px solid #4e342e;
+                transition: all 0.3s;
+                cursor: pointer;
+              "
+              onclick="showDocentes('trabajo')"
+              onmouseover="
+                this.style.transform = 'translateY(-4px)';
+                this.style.boxShadow = '0 12px 40px rgba(0,0,0,0.1)';
+              "
+              onmouseout="
+                this.style.transform = '';
+                this.style.boxShadow = '';
+              "
+            >
+              <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem">
+                <div
+                  style="
+                    width: 52px;
+                    height: 52px;
+                    background: #4e342e;
+                    border-radius: 12px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 24px;
+                    flex-shrink: 0;
+                  "
+                >
+                  🛠️
+                </div>
+                <h3
+                  style="
+                    font-family: var(--font-title);
+                    font-size: 1.1rem;
+                    font-weight: 700;
+                    color: var(--navy);
+                  "
+                >
+                  Educación para el Trabajo
+                </h3>
+              </div>
+              <p style="color: #4b5563; font-size: 14px; line-height: 1.8">
+                Formamos competencias técnicas y empresariales que preparan a los estudiantes para
+                el mundo laboral y el emprendimiento. Los estudiantes desarrollan proyectos
+                productivos reales con impacto en la comunidad.
+              </p>
+            </div>
+
+            <div
+              style="
+                background: linear-gradient(135deg, var(--navy), var(--red-dark));
+                border-radius: 16px;
+                padding: 2rem;
+                border-left: 5px solid var(--gold);
+                transition: all 0.3s;
+                cursor: pointer;
+              "
+              onclick="showDocentes('innovacion')"
+              onmouseover="
+                this.style.transform = 'translateY(-4px)';
+                this.style.boxShadow = '0 12px 40px rgba(0,0,0,0.2)';
+              "
+              onmouseout="
+                this.style.transform = '';
+                this.style.boxShadow = '';
+              "
+            >
+              <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem">
+                <div
+                  style="
+                    width: 52px;
+                    height: 52px;
+                    background: var(--gold);
+                    border-radius: 12px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 24px;
+                    flex-shrink: 0;
+                  "
+                >
+                  💻
+                </div>
+                <h3
+                  style="
+                    font-family: var(--font-title);
+                    font-size: 1.1rem;
+                    font-weight: 700;
+                    color: white;
+                  "
+                >
+                  Aula de Innovación Pedagógica
+                </h3>
+              </div>
+              <p style="color: rgba(255, 255, 255, 0.85); font-size: 14px; line-height: 1.8">
+                Integramos la tecnología al aprendizaje mediante el uso de computadoras, tablets,
+                plataformas educativas digitales, robótica y programación. Preparamos a nuestros
+                estudiantes para la era digital con competencias del siglo XXI.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>

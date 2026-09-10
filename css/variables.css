@@ -1,0 +1,16 @@
+:root {
+  --red: #8b0000;
+  --red-light: #b22222;
+  --red-dark: #5c0000;
+  --navy: #0b1f3a;
+  --navy-light: #1a3a6e;
+  --gold: #c9a84c;
+  --gold-light: #f0c96c;
+  --cream: #f5e6c8;
+  --white: #ffffff;
+  --dark: #1a1a1a;
+  --gray: #6b7280;
+  --gray-light: #f3f4f6;
+  --font-title: 'Trebuchet MS', 'Segoe UI', sans-serif;
+  --font-body: 'Segoe UI', Arial, sans-serif;
+}
