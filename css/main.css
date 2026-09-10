@@ -1,3 +1,5 @@
+@import url('./variables.css');
+
 *,
 *::before,
 *::after {
@@ -7,22 +9,6 @@
 }
 [hidden] {
   display: none !important;
-}
-:root {
-  --red: #8b0000;
-  --red-light: #b22222;
-  --red-dark: #5c0000;
-  --navy: #0b1f3a;
-  --navy-light: #1a3a6e;
-  --gold: #c9a84c;
-  --gold-light: #f0c96c;
-  --cream: #f5e6c8;
-  --white: #ffffff;
-  --dark: #1a1a1a;
-  --gray: #6b7280;
-  --gray-light: #f3f4f6;
-  --font-title: 'Trebuchet MS', 'Segoe UI', sans-serif;
-  --font-body: 'Segoe UI', Arial, sans-serif;
 }
 /* Accessibility: screen-reader only text */
 .sr-only {
@@ -3022,6 +3008,41 @@ footer {
 .student-summary-card span { color: var(--gray); font-size: 0.72rem; font-weight: 700; }
 .student-summary-card strong { color: var(--navy); font-family: var(--font-title); font-size: 1.15rem; }
 .student-summary-card small { color: #8993a0; font-size: 0.68rem; }
+.student-notice-strip {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin: 0 0 1.5rem;
+  padding: 1rem 1.15rem;
+  border: 1px solid rgba(201, 168, 76, 0.42);
+  border-left: 4px solid var(--gold);
+  border-radius: 10px;
+  background: #fffdf5;
+}
+.student-notice-icon {
+  display: grid;
+  flex: 0 0 30px;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--gold);
+  color: var(--navy);
+  font-weight: 800;
+}
+.student-notice-strip div { display: grid; flex: 1; gap: 0.15rem; }
+.student-notice-strip strong { color: var(--navy); font-family: var(--font-title); font-size: 0.85rem; }
+.student-notice-strip p, .student-notice-state { color: var(--gray); font-size: 0.72rem; }
+.student-notice-state { white-space: nowrap; }
+.student-list-placeholder { display: grid; gap: 0.45rem; padding-top: 0.65rem; }
+.student-list-placeholder strong { color: var(--navy); font-family: var(--font-title); font-size: 0.86rem; }
+.student-list-placeholder span { color: var(--gray); font-size: 0.75rem; line-height: 1.55; }
+.student-quick-actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.65rem; }
+.student-quick-actions a { display: grid; gap: 0.2rem; padding: 0.8rem; border: 1px solid #edf0f3; border-radius: 6px; color: var(--navy); text-decoration: none; transition: border-color 0.2s ease, transform 0.2s ease; }
+.student-quick-actions a:hover { border-color: var(--gold); transform: translateY(-2px); }
+.student-quick-actions a > span { color: var(--red); font-weight: 800; }
+.student-quick-actions strong { font-size: 0.75rem; }
+.student-quick-actions small { color: var(--gray); font-size: 0.68rem; }
 
 #page-estudiante .student-profile-card {
   align-items: center;
@@ -3110,6 +3131,9 @@ footer {
 @media (max-width: 800px) {
   #page-estudiante .student-area-section { padding-right: 1rem; padding-left: 1rem; }
   .student-summary-grid { grid-template-columns: 1fr; }
+  .student-notice-strip { align-items: flex-start; flex-wrap: wrap; }
+  .student-notice-state { margin-left: 2.65rem; white-space: normal; }
+  .student-quick-actions { grid-template-columns: 1fr; }
   .student-dashboard-intro { align-items: flex-start; flex-direction: column; gap: 1rem; }
   .student-date-chip { width: 100%; }
   #page-estudiante .student-profile-data { min-width: 0; grid-template-columns: repeat(2, auto); }

@@ -1,4 +1,6 @@
 // NAVIGATION SYSTEM
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+
 function navigate(page) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   const target = document.getElementById('page-' + page);
@@ -27,6 +29,11 @@ function toggleMenu() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('click', (event) => {
+    const enlaceInterno = event.target.closest('a[href="#"]');
+    if (enlaceInterno) event.preventDefault();
+  });
+
   document.querySelectorAll('.has-submenu').forEach(item => {
     const link = item.querySelector('.dropdown-toggle');
     if (link) {
@@ -123,6 +130,8 @@ function filterNews(cat) {
 
 // INIT
 window.addEventListener('load', () => {
+  if (!window.location.hash) window.scrollTo({ top: 0, behavior: 'auto' });
+
   setTimeout(() => {
     document.getElementById('loader').classList.add('hidden');
     setTimeout(() => document.getElementById('loader').remove(), 600);

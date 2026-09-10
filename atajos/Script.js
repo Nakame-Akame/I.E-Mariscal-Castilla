@@ -4834,7 +4834,12 @@ function cambiarVista(idVistaDestino) {
 
 /* ============================ INICIO ============================ */
 
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+
 renderizarTarjetasAreas();
 cambiarVista('vista-areas');
 window.addEventListener('hashchange', () => seleccionarSubcategoriaDesdeHash());
 seleccionarSubcategoriaDesdeHash(false);
+window.addEventListener('load', () => {
+  if (!window.location.hash) window.scrollTo({ top: 0, behavior: 'auto' });
+});
