@@ -38,10 +38,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const link = item.querySelector('.dropdown-toggle');
     if (link) {
       link.addEventListener('click', (event) => {
-        if (window.innerWidth <= 900) {
-          event.preventDefault();
-          item.classList.toggle('open');
-        }
+        event.preventDefault();
+        item.classList.toggle('open');
       });
     }
   });
