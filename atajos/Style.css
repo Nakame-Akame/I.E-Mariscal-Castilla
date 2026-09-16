@@ -653,10 +653,10 @@ main {
 }
 .horario-dia {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 16px;
-  padding: 10px 4px;
+  padding: 12px 8px;
   border-bottom: 1px dashed var(--line);
 }
 .horario-dia:last-child {
@@ -670,15 +670,41 @@ main {
   color: var(--ink-soft);
   width: 100px;
   flex: none;
+  padding-top: 10px;
 }
 .horario-dia-valor {
   text-align: right;
   font-size: 14px;
   color: var(--ink);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  width: 100%;
+  max-width: 260px;
 }
 .horario-dia-valor strong {
   color: var(--navy-deep);
-  font-weight: 600;
+  font-weight: 700;
+  background: #f3efe8;
+  border: 1px solid #e6dfd1;
+  border-radius: 999px;
+  padding: 5px 10px;
+  display: inline-block;
+}
+.horario-ref,
+.horario-etiqueta {
+  display: inline-block;
+  font-family: 'Space Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #7a5b2d;
+  background: #f7f0d8;
+  border: 1px solid #ead9a9;
+  border-radius: 999px;
+  padding: 3px 7px;
+  font-weight: 700;
 }
 .horario-lugar {
   display: block;
@@ -686,6 +712,30 @@ main {
   font-size: 11px;
   color: var(--burgundy);
   margin-top: 2px;
+}
+.horario-exacto {
+  margin-top: 6px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--line);
+  color: var(--navy-deep);
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  text-align: right;
+  background: #fffaf1;
+  border-radius: 10px;
+  padding: 8px 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.horario-exacto small {
+  display: block;
+  font-size: 11px;
+  color: var(--navy-deep);
+  margin: 4px 0 2px;
+  font-weight: 700;
+}
+.horario-lugar-exacto {
+  margin-top: 0;
 }
 .horario-dia.sin-atencion .horario-dia-valor {
   color: var(--line);

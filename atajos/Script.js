@@ -4450,9 +4450,79 @@ function iniciales(nombre) {
   return (partes[0][0] + partes[1][0]).toUpperCase();
 }
 
+function normalizarNombre(nombre = '') {
+  return nombre
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[\u2018\u2019]/g, '')
+    .replace(/[.,;:()\-_/\\]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase();
+}
+
+function coincidenNombres(a = '', b = '') {
+  const nombreA = normalizarNombre(a);
+  const nombreB = normalizarNombre(b);
+
+  if (!nombreA || !nombreB) return false;
+  if (nombreA === nombreB) return true;
+
+  const tokensIgnorados = new Set(['de', 'del', 'la', 'las', 'los', 'y', 'e', 'el', 'en']);
+  const tokensA = nombreA.split(' ').filter(Boolean).filter((token) => !tokensIgnorados.has(token));
+  const tokensB = nombreB.split(' ').filter(Boolean).filter((token) => !tokensIgnorados.has(token));
+
+  if (tokensA.length === 0 || tokensB.length === 0) return false;
+
+  const mismoTotal =
+    tokensA.length === tokensB.length && tokensA.every((token, index) => token === tokensB[index]);
+  if (mismoTotal) return true;
+
+  const conjuntoA = new Set(tokensA);
+  const conjuntoB = new Set(tokensB);
+  const palabrasComunes = tokensA.filter((token) => conjuntoB.has(token));
+
+  if (palabrasComunes.length >= Math.min(tokensA.length, tokensB.length) - 1) {
+    return true;
+  }
+
+  const apellidosA = tokensA.slice(-2).join(' ');
+  const apellidosB = tokensB.slice(-2).join(' ');
+  if (apellidosA && apellidosB && apellidosA === apellidosB) {
+    return true;
+  }
+
+  return tokensA.length > 1 && tokensB.length > 1 && tokensA[0] === tokensB[0] && tokensA.at(-1) === tokensB.at(-1);
+}
+
+function buscarPersonaPorNombre(area, nombre) {
+  const personas = directorioData[area] || [];
+  if (!personas.length) return null;
+
+  const exacta = personas.find((persona) => persona.nombre === nombre);
+  if (exacta) return exacta;
+
+  const nombreBuscado = nombre || '';
+  return (
+    personas.find((persona) => coincidenNombres(persona.nombre, nombreBuscado)) || null
+  );
+}
+
 // Devuelve el horario de una persona o null si todavía no está cargado
 function obtenerHorarioPersona(area, nombre) {
-  return (horariosAtencion[area] && horariosAtencion[area][nombre]) || null;
+  const areaHorarios = horariosAtencion[area];
+  if (!areaHorarios) return null;
+
+  if (areaHorarios[nombre]) return areaHorarios[nombre];
+
+  const nombreBuscado = nombre || '';
+  for (const [clave, horario] of Object.entries(areaHorarios)) {
+    if (coincidenNombres(clave, nombreBuscado)) {
+      return horario;
+    }
+  }
+
+  return null;
 }
 
 function tieneHorario(area, nombre) {
@@ -4752,13 +4822,13 @@ function mostrarHorarioPersona(area, nombre) {
   areaActual = area;
   personaActual = nombre;
 
-  const persona = (directorioData[area] || []).find((d) => d.nombre === nombre);
+  const persona = buscarPersonaPorNombre(area, nombre);
 
-  document.getElementById('horario-nombre').textContent = nombre;
+  document.getElementById('horario-nombre').textContent = persona ? persona.nombre : nombre;
   document.getElementById('horario-cargo').textContent = persona ? persona.cargo : '';
   document.getElementById('horario-area').textContent = area;
 
-  renderizarHorario(area, nombre);
+  renderizarHorario(area, persona ? persona.nombre : nombre);
   cambiarVista('vista-horario');
 }
 
@@ -4780,12 +4850,12 @@ function renderizarHorario(area, nombre) {
   }
 
   contenedor.innerHTML = `
-    ${construirTablaHorario('Atención a padres de familia', horario.padres)}
-    ${construirTablaHorario('Atención a estudiantes', horario.estudiantes)}
+    ${construirTablaHorario('Atención a padres de familia', horario.padres, horario.estudiantes)}
+    ${construirTablaHorario('Atención a estudiantes', horario.estudiantes, horario.padres)}
   `;
 }
 
-function construirTablaHorario(titulo, datosSemana) {
+function construirTablaHorario(titulo, datosSemana, datosAlternativos = null) {
   if (!datosSemana) {
     return `
       <div class="bloque-horario">
@@ -4796,6 +4866,8 @@ function construirTablaHorario(titulo, datosSemana) {
 
   const filas = DIAS_SEMANA.map(({ key, label }) => {
     const info = datosSemana[key];
+    const alternativa = datosAlternativos && datosAlternativos[key];
+
     if (!info) {
       return `
         <div class="horario-dia sin-atencion">
@@ -4803,12 +4875,40 @@ function construirTablaHorario(titulo, datosSemana) {
           <span class="horario-dia-valor">—</span>
         </div>`;
     }
+
+    const horaPrincipal = info.hora || '';
+    const horaAlternativa = alternativa && alternativa.hora ? alternativa.hora : '';
+    const tieneReferenciaGeneral = /HORA|BOLSA DE HORAS/i.test(horaPrincipal);
+
+    const horaExacta = (() => {
+      if (horaAlternativa && horaAlternativa !== horaPrincipal && /\d/.test(horaAlternativa) && !/HORA|BOLSA DE HORAS/i.test(horaAlternativa)) {
+        return horaAlternativa;
+      }
+      if (horaPrincipal && /\d/.test(horaPrincipal) && !/HORA|BOLSA DE HORAS/i.test(horaPrincipal)) {
+        return horaPrincipal;
+      }
+      return '';
+    })();
+
+    const lugarPrincipal = info.lugar ? `<span class="horario-lugar">${info.lugar}</span>` : '';
+    const lugarExacto = (() => {
+      if (!horaExacta) return '';
+      const lugarBase = info.hora === horaExacta ? info.lugar : (alternativa && alternativa.hora === horaExacta ? alternativa.lugar : '');
+      return lugarBase ? `<span class="horario-lugar horario-lugar-exacto">${lugarBase}</span>` : '';
+    })();
+
+    const detalleExacto = horaExacta && (horaExacta !== horaPrincipal || !tieneReferenciaGeneral)
+      ? `<div class="horario-exacto"><span class="horario-etiqueta">Horario exacto</span><small>${horaExacta}</small>${lugarExacto || ''}</div>`
+      : '';
+
     return `
       <div class="horario-dia">
         <span class="horario-dia-label">${label}</span>
         <span class="horario-dia-valor">
-          <strong>${info.hora}</strong>
-          ${info.lugar ? `<span class="horario-lugar">${info.lugar}</span>` : ''}
+          <span class="horario-ref">${tieneReferenciaGeneral ? 'Referencia' : 'Horario'}</span>
+          <strong>${horaPrincipal || horaExacta}</strong>
+          ${lugarPrincipal || lugarExacto}
+          ${detalleExacto}
         </span>
       </div>`;
   }).join('');
