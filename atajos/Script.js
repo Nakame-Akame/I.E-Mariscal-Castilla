@@ -4865,8 +4865,11 @@ function construirTablaHorario(titulo, datosSemana, datosAlternativos = null) {
   }
 
   const filas = DIAS_SEMANA.map(({ key, label }) => {
-    const info = datosSemana[key];
-    const alternativa = datosAlternativos && datosAlternativos[key];
+    const dato = datosSemana[key];
+    const info = typeof dato === 'string' ? { hora: dato } : dato;
+    const datoAlternativo = datosAlternativos && datosAlternativos[key];
+    const alternativa =
+      typeof datoAlternativo === 'string' ? { hora: datoAlternativo } : datoAlternativo;
 
     if (!info) {
       return `
