@@ -4092,7 +4092,7 @@ const horariosAtencion = {
     "estudiantes": {
       "lunes": null,
       "martes": null,
-      "miercoles": null,
+      "miercoles": { "hora": "12:40-14:10", "lugar": "107C" },
       "jueves": null,
       "viernes": null,
     },
@@ -4107,7 +4107,7 @@ const horariosAtencion = {
     },
     "estudiantes": {
       "lunes": null,
-      "martes": null,
+      "martes": { "hora": "12:15-13:00", "lugar": "103B" },
       "miercoles": null,
       "jueves": null,
       "viernes": null,
@@ -4123,8 +4123,8 @@ const horariosAtencion = {
     },
     "estudiantes": {
       "lunes": null,
-      "martes": null,
-      "miercoles": null,
+      "martes": { "hora": "12:15-13:00", "lugar": "204A" },
+      "miercoles": { "hora": "12:15-13:00", "lugar": "204A" },
       "jueves": null,
       "viernes": null,
     },
@@ -4141,7 +4141,7 @@ const horariosAtencion = {
       "lunes": null,
       "martes": null,
       "miercoles": null,
-      "jueves": null,
+      "jueves": { "hora": "12:40-14:10", "lugar": "201A" },
       "viernes": null,
     },
   },
@@ -4155,7 +4155,7 @@ const horariosAtencion = {
     },
     "estudiantes": {
       "lunes": null,
-      "martes": null,
+      "martes": { "hora": "12:15-13:00", "lugar": "301B" },
       "miercoles": null,
       "jueves": null,
       "viernes": null,
@@ -4171,7 +4171,7 @@ const horariosAtencion = {
     },
     "estudiantes": {
       "lunes": null,
-      "martes": null,
+      "martes": { "hora": "11:30-13:00", "lugar": "105B" },
       "miercoles": null,
       "jueves": null,
       "viernes": null,
@@ -4189,7 +4189,7 @@ const horariosAtencion = {
       "lunes": null,
       "martes": null,
       "miercoles": null,
-      "jueves": null,
+      "jueves": { "hora": "11:30-13:00", "lugar": "103B" },
       "viernes": null,
     },
   },
@@ -4198,15 +4198,15 @@ const horariosAtencion = {
       "lunes": null,
       "martes": null,
       "miercoles": null,
-      "jueves": { "hora": "7 HORA (M/T)", "lugar": "202A" }, // ESTIMACIÓN - confirmar turno
-      "viernes": { "hora": "1 HORA (M/T)", "lugar": "202A" }, // ESTIMACIÓN - confirmar turno
+      "jueves": { "hora": "7 HORA (M/T)", "lugar": "202A" },
+      "viernes": { "hora": "1 HORA (M/T)", "lugar": "202A" },
     },
     "estudiantes": {
       "lunes": null,
       "martes": null,
       "miercoles": null,
       "jueves": null,
-      "viernes": null,
+      "viernes": { "hora": "11:30-13:00", "lugar": "202A" },
     },
   },
   "Moreno Vasquez, Patricia Lourdes": {
@@ -4220,7 +4220,7 @@ const horariosAtencion = {
     "estudiantes": {
       "lunes": null,
       "martes": null,
-      "miercoles": null,
+      "miercoles": { "hora": "12:40-14:10", "lugar": "105C" },
       "jueves": null,
       "viernes": null,
     },
@@ -4228,8 +4228,8 @@ const horariosAtencion = {
   "Baquerizo Villar, Carmen Judith": {
     "padres": {
       "lunes": null,
-      "martes": null,
-      "miercoles": { "hora": "3 HORA (T)", "lugar": "202A" },
+      "martes": { "hora": "3 HORA (T)", "lugar": "202A" },
+      "miercoles": null,
       "jueves": null,
       "viernes": null,
     },
@@ -4237,7 +4237,7 @@ const horariosAtencion = {
       "lunes": null,
       "martes": null,
       "miercoles": null,
-      "jueves": null,
+      "jueves": { "hora": "11:30-13:00", "lugar": "202A" },
       "viernes": null,
     },
   },
@@ -4250,7 +4250,7 @@ const horariosAtencion = {
       "viernes": null,
     },
     "estudiantes": {
-      "lunes": null,
+      "lunes": { "hora": "12:40-14:10", "lugar": "204A" },
       "martes": null,
       "miercoles": null,
       "jueves": null,
@@ -4266,7 +4266,7 @@ const horariosAtencion = {
       "viernes": null,
     },
     "estudiantes": {
-      "lunes": null,
+      "lunes": { "hora": "12:40-14:10", "lugar": "105B" },
       "martes": null,
       "miercoles": null,
       "jueves": null,
@@ -4286,7 +4286,7 @@ const horariosAtencion = {
       "martes": null,
       "miercoles": null,
       "jueves": null,
-      "viernes": null,
+      "viernes": { "hora": "12:40-14:10", "lugar": "106C" },
     },
   },
   "Rojas Orna, Jackeline Elva": {
@@ -4299,7 +4299,7 @@ const horariosAtencion = {
     },
     "estudiantes": {
       "lunes": null,
-      "martes": null,
+      "martes": { "hora": "12:40-14:10", "lugar": "104B" },
       "miercoles": null,
       "jueves": null,
       "viernes": null,
@@ -4316,7 +4316,7 @@ const horariosAtencion = {
     "estudiantes": {
       "lunes": null,
       "martes": null,
-      "miercoles": null,
+      "miercoles": { "hora": "12:15-13:00", "lugar": "106C" },
       "jueves": null,
       "viernes": null,
     },
@@ -4331,7 +4331,7 @@ const horariosAtencion = {
     },
     "estudiantes": {
       "lunes": null,
-      "martes": null,
+      "martes": { "hora": "12:40-14:10", "lugar": "203A" },
       "miercoles": null,
       "jueves": null,
       "viernes": null,
@@ -4350,7 +4350,7 @@ const horariosAtencion = {
       "martes": null,
       "miercoles": null,
       "jueves": null,
-      "viernes": null,
+      "viernes": { "hora": "11:30-13:00", "lugar": "104B" },
     },
   },
   "Vilchez Gutarra, Efraín Alfredo": {
@@ -4365,7 +4365,7 @@ const horariosAtencion = {
       "lunes": null,
       "martes": null,
       "miercoles": null,
-      "jueves": null,
+      "jueves": { "hora": "11:30-13:00", "lugar": "107C" },
       "viernes": null,
     },
   },
@@ -4382,7 +4382,7 @@ const horariosAtencion = {
       "martes": null,
       "miercoles": null,
       "jueves": null,
-      "viernes": null,
+      "viernes": { "hora": "11:30-13:00", "lugar": "201A" },
     },
   },
   "Salazar Chuquillanqui, Estephany Lisbeth": {
@@ -4395,9 +4395,9 @@ const horariosAtencion = {
     },
     "estudiantes": {
       "lunes": null,
-      "martes": null,
+      "martes": { "hora": "12:15-13:00", "lugar": "203A" },
       "miercoles": null,
-      "jueves": null,
+      "jueves": { "hora": "12:15-13:00", "lugar": "203A" },
       "viernes": null,
     },
   },

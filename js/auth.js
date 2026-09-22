@@ -609,6 +609,7 @@ function actualizarEnlacePerfil(elemento, user, movil = false) {
 function actualizarSesionEstudiante(session, perfil = estudiantePerfil) {
   estudianteSession = session;
   estudiantePerfil = session?.user ? perfil : null;
+  window.estudianteSession = estudianteSession;
   const acceso = document.getElementById('student-access');
   const accesoMovil = document.getElementById('student-access-mobile');
   const usuario = document.getElementById('student-user-email');
@@ -631,6 +632,11 @@ function actualizarSesionEstudiante(session, perfil = estudiantePerfil) {
     actualizarPerfilEstudiante(estudiantePerfil);
     if (botonSesion) botonSesion.textContent = 'Cerrar sesión';
   } else {
+    const paginaEstudiante = document.getElementById('page-estudiante');
+    if (paginaEstudiante) {
+      paginaEstudiante.hidden = true;
+      paginaEstudiante.classList.remove('active');
+    }
     actualizarEnlacePerfil(acceso, null);
     actualizarEnlacePerfil(accesoMovil, null, true);
     if (usuario) usuario.textContent = '';

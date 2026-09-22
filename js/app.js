@@ -2,9 +2,14 @@
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 
 function navigate(page) {
+  if (page === 'estudiante' && !window.estudianteSession?.user) {
+    if (typeof mostrarLogin === 'function') mostrarLogin();
+    return;
+  }
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   const target = document.getElementById('page-' + page);
   if (target) {
+    target.hidden = false;
     target.classList.add('active');
     window.scrollTo({top:0, behavior:'smooth'});
   }

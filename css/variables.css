@@ -1,16 +1,20 @@
 :root {
-  --red: #8b0000;
-  --red-light: #b22222;
-  --red-dark: #5c0000;
-  --navy: #0b1f3a;
-  --navy-light: #1a3a6e;
-  --gold: #c9a84c;
-  --gold-light: #f0c96c;
-  --cream: #f5e6c8;
+  --red: #b63b2b;
+  --red-light: #d45342;
+  --red-dark: #8a2b20;
+  --navy: #0f172a;
+  --navy-light: #1d2d4d;
+  --gold: #d8b36a;
+  --gold-light: #f2d89d;
+  --cream: #f6efe4;
   --white: #ffffff;
-  --dark: #1a1a1a;
-  --gray: #6b7280;
-  --gray-light: #f3f4f6;
-  --font-title: 'Trebuchet MS', 'Segoe UI', sans-serif;
-  --font-body: 'Segoe UI', Arial, sans-serif;
+  --dark: #1d1d1f;
+  --gray: #6e6e73;
+  --gray-light: #f5f5f7;
+  --line: rgba(15, 23, 42, 0.08);
+  --surface: rgba(255, 255, 255, 0.7);
+  --shadow-soft: 0 20px 60px rgba(15, 23, 42, 0.08);
+  --shadow-card: 0 12px 32px rgba(15, 23, 42, 0.08);
+  --font-title: 'SF Pro Display', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  --font-body: 'SF Pro Text', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
 }
