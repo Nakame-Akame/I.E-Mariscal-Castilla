@@ -83,9 +83,9 @@ button {
 .crest {
   width: 64px;
   height: 64px;
-  border-radius: 50%;
+  border-radius: 0;
   flex: none;
-  background: radial-gradient(circle at 32% 28%, var(--gold-soft), var(--gold) 55%, #9c771f 100%);
+  background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -93,7 +93,13 @@ button {
   font-weight: 900;
   font-size: 24px;
   color: var(--navy-deep);
-  border: 2px solid rgba(244, 239, 227, 0.55);
+  border: none;
+}
+.crest img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 0;
 }
 .header-text .eyebrow {
   font-family: 'Space Mono', monospace;
@@ -159,9 +165,9 @@ button {
 }
 
 main {
-  max-width: 1100px;
+  max-width: 1600px;
   margin: 0 auto;
-  padding: 28px 24px 60px;
+  padding: 28px 36px 60px;
 }
 
 /* Acciones del encabezado (alineadas a la derecha) */
@@ -630,12 +636,96 @@ main {
 }
 
 /* ---------- VISTA 3: HORARIO DE ATENCIÓN ---------- */
-.bloque-horario {
-  background: #fffdf7;
+.horarios-paneles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  align-items: start;
+}
+#vista-horario .btn-back {
+  margin-bottom: 12px;
+  padding: 6px 12px;
+}
+#vista-horario .detalle-head {
+  padding: 18px 24px 16px;
+  margin-bottom: 14px;
+}
+#vista-horario .detalle-head h2 {
+  margin-bottom: 4px;
+  font-size: clamp(20px, 2.6vw, 28px);
+}
+#vista-horario .detalle-head p {
+  margin-bottom: 10px;
+}
+.horario-panel {
+  min-width: 0;
   border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 20px 22px;
-  margin-bottom: 18px;
+  border-top: 5px solid var(--navy);
+  border-radius: 8px;
+  background: rgba(255, 253, 247, 0.82);
+  box-shadow: 0 8px 24px rgba(19, 40, 72, 0.08);
+  overflow: hidden;
+}
+.horario-panel-estudiantes {
+  border-top-color: var(--green-ok);
+}
+.horario-panel-padres {
+  border-top-color: var(--burgundy);
+}
+.horario-panel-encabezado {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 68px;
+  padding: 11px 16px;
+  background: linear-gradient(135deg, rgba(19, 40, 72, 0.06), rgba(255, 253, 247, 0.9));
+  border-bottom: 1px solid var(--line);
+}
+.horario-panel-estudiantes .horario-panel-encabezado {
+  background: linear-gradient(135deg, rgba(62, 107, 79, 0.1), rgba(255, 253, 247, 0.9));
+}
+.horario-panel-padres .horario-panel-encabezado {
+  background: linear-gradient(135deg, rgba(124, 47, 58, 0.1), rgba(255, 253, 247, 0.9));
+}
+.horario-panel-icon {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--navy);
+  color: var(--paper);
+  font-size: 15px;
+}
+.horario-panel-estudiantes .horario-panel-icon {
+  background: var(--green-ok);
+}
+.horario-panel-padres .horario-panel-icon {
+  background: var(--burgundy);
+}
+.horario-panel-kicker {
+  margin: 0 0 3px;
+  color: var(--ink-soft);
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.horario-panel h3 {
+  margin: 0;
+  color: var(--navy-deep);
+  font-family: 'Fraunces', serif;
+  font-size: 17px;
+  line-height: 1.2;
+}
+@media (max-width: 760px) {
+  .horarios-paneles {
+    grid-template-columns: 1fr;
+  }
+}
+.bloque-horario {
+  padding: 7px 12px 9px;
 }
 .horario-titulo {
   font-family: 'Fraunces', serif;
@@ -654,9 +744,9 @@ main {
 .horario-dia {
   display: flex;
   align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 12px 8px;
+  justify-content: flex-start;
+  gap: 12px;
+  padding: 7px 2px;
   border-bottom: 1px dashed var(--line);
 }
 .horario-dia:last-child {
@@ -668,20 +758,20 @@ main {
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--ink-soft);
-  width: 100px;
+  width: 82px;
   flex: none;
   padding-top: 10px;
 }
 .horario-dia-valor {
   text-align: right;
-  font-size: 14px;
+  font-size: 12px;
   color: var(--ink);
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: 4px;
   width: 100%;
-  max-width: 260px;
+  max-width: none;
 }
 .horario-dia-valor strong {
   color: var(--navy-deep);
@@ -689,7 +779,7 @@ main {
   background: #f3efe8;
   border: 1px solid #e6dfd1;
   border-radius: 999px;
-  padding: 5px 10px;
+  padding: 3px 8px;
   display: inline-block;
 }
 .horario-ref,
@@ -714,7 +804,7 @@ main {
   margin-top: 2px;
 }
 .horario-exacto {
-  margin-top: 6px;
+  margin-top: 4px;
   padding-top: 8px;
   border-top: 1px dashed var(--line);
   color: var(--navy-deep);
@@ -723,7 +813,7 @@ main {
   text-align: right;
   background: #fffaf1;
   border-radius: 10px;
-  padding: 8px 10px;
+  padding: 5px 8px;
   width: 100%;
   box-sizing: border-box;
 }
@@ -731,7 +821,7 @@ main {
   display: block;
   font-size: 11px;
   color: var(--navy-deep);
-  margin: 4px 0 2px;
+  margin: 2px 0 1px;
   font-weight: 700;
 }
 .horario-lugar-exacto {
@@ -1015,5 +1105,200 @@ footer {
   .areas-login-required {
     align-items: stretch;
     flex-direction: column;
+  }
+}
+
+/* ---------- ACABADO CONTEMPORANEO DEL DIRECTORIO ---------- */
+body {
+  background: #f7f8fa;
+  background-image: none;
+}
+.site-header {
+  padding: 24px 24px 20px;
+  border-bottom: 1px solid rgba(199, 154, 60, 0.7);
+  box-shadow: 0 12px 36px rgba(11, 26, 48, 0.12);
+}
+.site-header::before {
+  opacity: 0.35;
+}
+.header-inner,
+.header-search {
+  max-width: 1280px;
+}
+.header-inner {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) minmax(320px, 420px);
+  align-items: start;
+  gap: 18px;
+}
+.header-tools {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 14px;
+  min-width: 0;
+}
+.header-tools .header-actions {
+  position: static;
+  margin: 0;
+  align-self: flex-end;
+}
+.header-text h1 {
+  letter-spacing: 0;
+}
+.header-search input,
+.buscador-wrap input {
+  border: 1px solid rgba(19, 40, 72, 0.16);
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(19, 40, 72, 0.08);
+}
+.header-search input {
+  background: rgba(11, 26, 48, 0.68);
+}
+.header-search {
+  margin-top: 18px;
+}
+.header-tools .header-search {
+  width: 100%;
+  margin: 0;
+}
+.section-label {
+  margin-bottom: 16px;
+  font-size: 10px;
+}
+.categoria-bloque .grid-areas {
+  margin-top: 1rem;
+  padding: 0;
+}
+.subcategoria-bloque {
+  margin-bottom: 14px;
+  padding: 16px 18px 18px;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(19, 40, 72, 0.1);
+  border-left: 3px solid var(--gold);
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(19, 40, 72, 0.06);
+}
+.subcategoria-bloque:hover,
+.subcategoria-bloque.seleccionada {
+  background: #fff;
+  border-left-color: var(--navy);
+  box-shadow: 0 14px 34px rgba(19, 40, 72, 0.1);
+}
+.subcategoria-header {
+  padding: 4px 0 12px;
+  border-bottom: 1px solid rgba(19, 40, 72, 0.1);
+  font-size: 1.08rem;
+}
+.subcategoria-header:hover {
+  transform: none;
+}
+.subcategoria-badge {
+  border: 1px solid rgba(199, 154, 60, 0.32);
+}
+.grid-areas {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 18px;
+}
+.card-area {
+  min-height: 174px;
+  padding: 24px;
+  background: #fff;
+  border: 1px solid rgba(19, 40, 72, 0.1);
+  border-left: 1px solid rgba(19, 40, 72, 0.1);
+  border-radius: 15px;
+  box-shadow: 0 8px 24px rgba(19, 40, 72, 0.07);
+}
+.card-area::before {
+  height: 2px;
+  opacity: 1;
+}
+.card-area::after {
+  display: none;
+}
+.card-area:hover {
+  transform: translateY(-3px);
+  border-color: rgba(199, 154, 60, 0.55);
+  border-left-color: rgba(199, 154, 60, 0.55);
+  background: #fff;
+  box-shadow: 0 16px 34px rgba(19, 40, 72, 0.12);
+}
+.card-area h3 {
+  margin: 8px 0 10px;
+  letter-spacing: 0;
+}
+.badge-count {
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: rgba(232, 205, 140, 0.36);
+  border: 1px solid rgba(199, 154, 60, 0.3);
+  box-shadow: none;
+}
+.card-docente {
+  background: #fff;
+  border: 1px solid rgba(19, 40, 72, 0.1);
+  border-radius: 15px;
+  box-shadow: 0 8px 24px rgba(19, 40, 72, 0.07);
+}
+.card-docente:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 34px rgba(19, 40, 72, 0.12);
+}
+.detalle-head {
+  border-radius: 18px;
+  box-shadow: 0 14px 34px rgba(11, 26, 48, 0.14);
+}
+.areas-login-required {
+  margin-top: 14px;
+  border: 1px solid rgba(199, 154, 60, 0.28);
+  border-radius: 14px;
+  background: rgba(232, 205, 140, 0.12);
+}
+.areas-login-required button {
+  border-radius: 10px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.areas-login-required button:hover,
+.areas-login-required button:focus-visible {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(19, 40, 72, 0.18);
+}
+.btn-back,
+.back-home-btn {
+  border-color: rgba(19, 40, 72, 0.16);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.7);
+}
+.btn-back:hover,
+.back-home-btn:hover {
+  background: #fff;
+  border-color: var(--gold);
+}
+.card-area:focus-visible,
+.card-docente:focus-visible,
+.subcategoria-header:focus-visible,
+.btn-back:focus-visible,
+.back-home-btn:focus-visible {
+  outline: 3px solid var(--gold-soft);
+  outline-offset: 3px;
+}
+@media (max-width: 760px) {
+  .header-inner {
+    grid-template-columns: 56px minmax(0, 1fr);
+    gap: 14px;
+  }
+  .header-tools {
+    grid-column: 2;
+    align-items: flex-start;
+  }
+  .header-tools .header-actions {
+    align-self: flex-start;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .card-area,
+  .card-docente,
+  .areas-login-required button {
+    transition: none;
   }
 }

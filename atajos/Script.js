@@ -1810,7 +1810,8 @@ const horariosAtencion = {
       },
     },
   },
-  'ED. FISICA': {
+  // Este bloque provenía de una sección mal rotulada del documento y repetía datos de EPT.
+  '__DATOS_EPT_DUPLICADOS__': {
     'Mendoza Colonio, Lizardo': {
       padres: {
         lunes: null,
@@ -4080,7 +4081,7 @@ const horariosAtencion = {
       },
     },
   },
-  "COMUNICACION": {
+  "__COMUNICACION_DUPLICADA_SIN_TILDE__": {
   "Zevallos Baldeon, Ruben Dario": {
     "padres": {
       "lunes": { "hora": "5 HORA (M)", "lugar": "107C" },
@@ -4418,6 +4419,73 @@ const horariosAtencion = {
     },
   },
 },
+};
+
+const horariosEstudiantesDpcc = {
+  'Flores Paitan, Ybonne Yoan': { lunes: null, martes: null, miercoles: null, jueves: null, viernes: null },
+  'Romani Gamion, Maricela Esperanza': { lunes: { hora: '12:15-13:00', lugar: '201C' }, martes: null, miercoles: null, jueves: null, viernes: null },
+  'Parraguirre Cordova, Carolina': { lunes: { hora: '12:15-13:00', lugar: '205A' }, martes: null, miercoles: { hora: '12:15-13:00', lugar: '205A' }, jueves: null, viernes: null },
+  'Monroy Astete, Nelly Mercedes': { lunes: null, martes: null, miercoles: { hora: '12:15-13:00', lugar: '207A' }, jueves: { hora: '12:15-13:00', lugar: '207A' }, viernes: null },
+  'Trujillo Meza, Marco Antonio': { lunes: null, martes: null, miercoles: null, jueves: { hora: '12:15-13:00', lugar: '208A' }, viernes: null },
+  'Castro Gaspar, Magno': { lunes: { hora: '11:55-12:40', lugar: '206A' }, martes: null, miercoles: null, jueves: null, viernes: null },
+  'Rojas Castro, Pedro Florencio': { lunes: { hora: '12:15-13:00', lugar: '203C' }, martes: null, miercoles: { hora: '12:15-13:00', lugar: '203C' }, jueves: null, viernes: null },
+  'Salazar Gamarra, Raul Armando': { lunes: null, martes: null, miercoles: { hora: '12:15-13:00', lugar: '202C' }, jueves: { hora: '12:15-13:00', lugar: '202C' }, viernes: null },
+  'Brañez Cochachi, Marco Antonio': { lunes: null, martes: null, miercoles: null, jueves: { hora: '12:15-13:00', lugar: '106B' }, viernes: { hora: '12:15-13:00', lugar: '106B' } },
+  'Campos Nuñez, Antonio': { lunes: { hora: '12:00-12:45', lugar: '202B' }, martes: null, miercoles: { hora: '12:00-12:45', lugar: '202B' }, jueves: null, viernes: null },
+  'Utos Barrante, Uber Elfri': { lunes: { hora: '12:00-12:45', lugar: '201B' }, martes: null, miercoles: null, jueves: { hora: '12:00-12:45', lugar: '201B' }, viernes: null },
+};
+
+Object.entries(horariosEstudiantesDpcc).forEach(([nombre, estudiantes]) => {
+  if (horariosAtencion['CC.SS. - DPCC']?.[nombre]) {
+    horariosAtencion['CC.SS. - DPCC'][nombre].estudiantes = estudiantes;
+  }
+});
+
+horariosAtencion['ED. FÍSICA'] = {
+  'Laura Capcha, Gilmer Juan': {
+    padres: { lunes: { hora: '08:50-10:20', lugar: '302 A' }, martes: null, miercoles: null, jueves: null, viernes: null },
+    estudiantes: { lunes: null, martes: null, miercoles: null, jueves: { hora: '12:40-13:25', lugar: '302 A' }, viernes: { hora: '12:40-13:25', lugar: '302 A' } },
+  },
+  'Ataucusi Galvan, Ruth': {
+    padres: { lunes: { hora: '10:40-11:25', lugar: '205 C' }, martes: null, miercoles: null, jueves: { hora: '09:35-10:20', lugar: '205 C' }, viernes: null },
+    estudiantes: { lunes: null, martes: null, miercoles: { hora: '12:40-13:25', lugar: '205 C' }, jueves: { hora: '12:40-13:25', lugar: '205 C' }, viernes: null },
+  },
+  'Saravia Galindo, Teresa Enma': {
+    padres: { lunes: null, martes: null, miercoles: null, jueves: null, viernes: { hora: '08:50-10:20', lugar: '206 C' } },
+    estudiantes: { lunes: { hora: '12:40-13:25', lugar: '206 C' }, martes: null, miercoles: null, jueves: { hora: '12:40-13:25', lugar: '206 C' }, viernes: null },
+  },
+  'Mendoza Rutti, Jose Miguel': {
+    padres: { lunes: { hora: '09:35-10:20', lugar: '106 A' }, martes: null, miercoles: { hora: '11:25-12:10', lugar: '106 A' }, jueves: null, viernes: null },
+    estudiantes: { lunes: null, martes: { hora: '12:40-13:25', lugar: '106 A' }, miercoles: { hora: '12:40-13:25', lugar: '106 A' }, jueves: null, viernes: null },
+  },
+  'Mendoza Colonio, Lizardo': {
+    padres: { lunes: null, martes: null, miercoles: { hora: '11:25-12:10', lugar: '203 B' }, jueves: { hora: '10:40-11:25', lugar: '203 B' }, viernes: null },
+    estudiantes: { lunes: null, martes: null, miercoles: null, jueves: { hora: '12:40-13:25', lugar: '203 B' }, viernes: { hora: '12:40-13:25', lugar: '203 B' } },
+  },
+  'Carpena Cruz, David Roger': {
+    padres: { lunes: null, martes: null, miercoles: null, jueves: { hora: '09:35-10:20 y 11:25-12:10', lugar: '301 A' }, viernes: null },
+    estudiantes: { lunes: null, martes: null, miercoles: null, jueves: { hora: '12:40-13:25', lugar: '301 A' }, viernes: { hora: '12:40-13:25', lugar: '301 A' } },
+  },
+  'Lorenzo Huamancaja, Rosa Nelly': {
+    padres: { lunes: null, martes: { hora: '14:30-15:15', lugar: '206 C' }, miercoles: null, jueves: null, viernes: null },
+    estudiantes: { lunes: null, martes: null, miercoles: null, jueves: null, viernes: { hora: '12:15-13:00', lugar: '206 C' } },
+  },
+  'Aliaga Orihuela, Isabel Marleny': {
+    padres: { lunes: null, martes: { hora: '14:30-16:00', lugar: '301 A' }, miercoles: null, jueves: null, viernes: null },
+    estudiantes: { lunes: null, martes: null, miercoles: null, jueves: null, viernes: { hora: '11:30-13:00', lugar: '301 A' } },
+  },
+  'Cerron Ramos, Wilfredo Jose': {
+    padres: { lunes: null, martes: null, miercoles: null, jueves: { hora: '15:15-16:00', lugar: '205 C' }, viernes: null },
+    estudiantes: { lunes: null, martes: null, miercoles: null, jueves: { hora: '12:15-13:00', lugar: '205 C' }, viernes: null },
+  },
+  'Mayta Atencio; Dimas Manuel': {
+    padres: { lunes: null, martes: null, miercoles: null, jueves: { hora: '14:30-16:00', lugar: '106 A' }, viernes: null },
+    estudiantes: { lunes: null, martes: null, miercoles: null, jueves: null, viernes: { hora: '11:30-13:00', lugar: '106 A' } },
+  },
+  'Castillo Callupe Gabriel Alberti': {
+    padres: { lunes: null, martes: { hora: '14:20-15:50', lugar: '302 A' }, miercoles: null, jueves: null, viernes: null },
+    estudiantes: { lunes: null, martes: null, miercoles: { hora: '11:30-13:00', lugar: '302 A' }, jueves: null, viernes: null },
+  },
 };
 
 const DIAS_SEMANA = [
@@ -4850,8 +4918,28 @@ function renderizarHorario(area, nombre) {
   }
 
   contenedor.innerHTML = `
-    ${construirTablaHorario('Atención a padres de familia', horario.padres, horario.estudiantes)}
-    ${construirTablaHorario('Atención a estudiantes', horario.estudiantes, horario.padres)}
+    <div class="horarios-paneles">
+      <section class="horario-panel horario-panel-estudiantes">
+        <div class="horario-panel-encabezado">
+          <span class="horario-panel-icon" aria-hidden="true">🎓</span>
+          <div>
+            <p class="horario-panel-kicker">Orientación académica</p>
+            <h3>Atención a estudiantes</h3>
+          </div>
+        </div>
+        ${construirTablaHorario('', horario.estudiantes, horario.padres)}
+      </section>
+      <section class="horario-panel horario-panel-padres">
+        <div class="horario-panel-encabezado">
+          <span class="horario-panel-icon" aria-hidden="true">👥</span>
+          <div>
+            <p class="horario-panel-kicker">Comunicación familiar</p>
+            <h3>Atención a padres de familia</h3>
+          </div>
+        </div>
+        ${construirTablaHorario('', horario.padres, horario.estudiantes)}
+      </section>
+    </div>
   `;
 }
 
@@ -4900,7 +4988,7 @@ function construirTablaHorario(titulo, datosSemana, datosAlternativos = null) {
       return lugarBase ? `<span class="horario-lugar horario-lugar-exacto">${lugarBase}</span>` : '';
     })();
 
-    const detalleExacto = horaExacta && (horaExacta !== horaPrincipal || !tieneReferenciaGeneral)
+    const detalleExacto = horaExacta && (horaExacta !== horaPrincipal || tieneReferenciaGeneral)
       ? `<div class="horario-exacto"><span class="horario-etiqueta">Horario exacto</span><small>${horaExacta}</small>${lugarExacto || ''}</div>`
       : '';
 
@@ -4918,7 +5006,7 @@ function construirTablaHorario(titulo, datosSemana, datosAlternativos = null) {
 
   return `
     <div class="bloque-horario">
-      <h3 class="horario-titulo">${titulo}</h3>
+      ${titulo ? `<h3 class="horario-titulo">${titulo}</h3>` : ''}
       <div class="horario-grid">${filas}</div>
     </div>`;
 }

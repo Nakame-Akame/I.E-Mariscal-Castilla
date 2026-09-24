@@ -1,16 +1,21 @@
 // NAVIGATION SYSTEM
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 
-function navigate(page) {
+function navigate(page, { updateHistory = true } = {}) {
   if (page === 'estudiante' && !window.estudianteSession?.user) {
     if (typeof mostrarLogin === 'function') mostrarLogin();
     return;
   }
+  if (updateHistory && window.location.hash !== `#${page}`) {
+    window.history.pushState({ page }, '', `#${page}`);
+  }
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   const target = document.getElementById('page-' + page);
+  const backHomeButton = document.getElementById('back-home-button');
   if (target) {
     target.hidden = false;
     target.classList.add('active');
+    if (backHomeButton) backHomeButton.hidden = page === 'home';
     window.scrollTo({top:0, behavior:'smooth'});
   }
 }
@@ -18,6 +23,15 @@ function navigate(page) {
 function showPage(page) {
   navigate(page);
 }
+
+function paginaDesdeHash() {
+  const page = window.location.hash.slice(1);
+  return page || 'home';
+}
+
+window.addEventListener('popstate', () => {
+  navigate(paginaDesdeHash(), { updateHistory: false });
+});
 
 // NAVBAR SCROLL
 window.addEventListener('scroll', () => {
@@ -135,6 +149,7 @@ function filterNews(cat) {
 
 // INIT
 window.addEventListener('load', () => {
+  navigate(paginaDesdeHash(), { updateHistory: false });
   if (!window.location.hash) window.scrollTo({ top: 0, behavior: 'auto' });
 
   setTimeout(() => {
