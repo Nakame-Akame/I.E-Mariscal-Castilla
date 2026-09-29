@@ -2,6 +2,13 @@
 
 Todos los cambios importantes en este proyecto se documentan en este archivo.
 
+## [Unreleased]
+
+### Agregado
+
+- Añadido `favicon.ico` en la raíz del proyecto.
+- Añadidas en `index.html` referencias al icono `img/Castilla.ico` para el favicon y el acceso directo del navegador; se mantiene el icono PNG existente.
+
 ## [1.0.0] - 2025-08-18
 
 ### 🔧 Arreglado

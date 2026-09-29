@@ -30,6 +30,7 @@ El sitio se sirve normalmente en `http://localhost:8000`. También puede abrirse
 
 ```text
 index.html                  Página institucional principal
+favicon.ico                 Favicon ICO en la raíz del sitio
 Script.js                   Navegación y comportamiento global
 style.css                   Estilos de la página principal
 atajos/areas_curriculares.html  Directorio institucional 2026
@@ -155,7 +156,7 @@ La carga de horarios es parcial. El código documenta información para EPT, Edu
 
 - Portada institucional completa.
 - Identidad visual con rojo, azul marino, dorado y blanco.
-- Metadatos SEO, Open Graph y favicon.
+- Metadatos SEO y Open Graph; `index.html` declara `img/Castilla.ico` como favicon ICO y acceso directo, y conserva `img/mc.png` como favicon PNG. También hay un `favicon.ico` en la raíz del sitio.
 - Diseño responsive y menú móvil.
 - Slider, contadores, lightbox, filtros, carrusel y navegación interna.
 - Guías de proyecto en README, desarrollo, contribución, incidencias y changelog.
