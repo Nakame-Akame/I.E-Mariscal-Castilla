@@ -19,11 +19,36 @@ alter table public.otp_codes enable row level security;
 -- La generacion y la verificacion ocurren en Edge Functions con service role.
 -- No se expone el hash al navegador.
 drop policy if exists "Usuarios consultan sus propios OTP" on public.otp_codes;
-create policy "Usuarios consultan sus propios OTP"
-on public.otp_codes
-for select
-to authenticated
-using ((select auth.uid()) = user_id);
-
 revoke all on public.otp_codes from anon, authenticated;
-grant select on public.otp_codes to authenticated;
+grant all on public.otp_codes to service_role;
+
+create table if not exists public.otp_verified_sessions (
+  user_id uuid not null references auth.users(id) on delete cascade,
+  session_id text not null,
+  expires_at timestamptz not null,
+  created_at timestamptz not null default now(),
+  primary key (user_id, session_id)
+);
+
+alter table public.otp_verified_sessions enable row level security;
+revoke all on public.otp_verified_sessions from anon, authenticated;
+grant all on public.otp_verified_sessions to service_role;
+
+create or replace function public.otp_session_verified()
+returns boolean
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  select exists (
+    select 1
+    from public.otp_verified_sessions verified
+    where verified.user_id = (select auth.uid())
+      and verified.session_id = (select auth.jwt() ->> 'session_id')
+      and verified.expires_at > pg_catalog.now()
+  );
+$$;
+
+revoke all on function public.otp_session_verified() from public, anon;
+grant execute on function public.otp_session_verified() to authenticated;

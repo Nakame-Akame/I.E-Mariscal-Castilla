@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="600" viewBox="0 0 1000 600" role="img" aria-labelledby="title desc">
+  <title id="title">Informe de seguridad: corrección implementada</title>
+  <desc id="desc">La verificación OTP ahora se valida en el servidor y las políticas RLS exigen una sesión OTP aprobada. Falta desplegar los cambios a Supabase para que apliquen en producción.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#101827"/>
+      <stop offset="1" stop-color="#1d2940"/>
+    </linearGradient>
+  </defs>
+  <rect width="1000" height="600" rx="28" fill="url(#bg)"/>
+  <text x="58" y="68" fill="#a9b8cc" font-family="Segoe UI, Arial, sans-serif" font-size="16" letter-spacing="2">INFORME · SEGURIDAD DEL PROYECTO</text>
+  <text x="58" y="133" fill="#f5f7fb" font-family="Segoe UI, Arial, sans-serif" font-size="37" font-weight="700">Corrección de OTP implementada</text>
+  <circle cx="904" cy="119" r="31" fill="#15803d"/>
+  <path d="m889 119 10 10 21-23" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="58" y="176" width="884" height="128" rx="18" fill="#173a2d" stroke="#22c55e" stroke-width="2"/>
+  <text x="88" y="217" fill="#bbf7d0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" letter-spacing="1.4">CAMBIO APLICADO EN EL CÓDIGO</text>
+  <text x="88" y="256" fill="#f0fdf4" font-family="Segoe UI, Arial, sans-serif" font-size="21" font-weight="600">El servidor aprueba cada sesión tras validar el OTP;</text>
+  <text x="88" y="283" fill="#f0fdf4" font-family="Segoe UI, Arial, sans-serif" font-size="21" font-weight="600">las políticas RLS bloquean el acceso sin esa aprobación.</text>
+  <text x="58" y="362" fill="#a9b8cc" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" letter-spacing="1.3">ESTADO</text>
+  <rect x="58" y="384" width="420" height="92" rx="15" fill="#173a2d" stroke="#22c55e"/>
+  <circle cx="98" cy="430" r="18" fill="#15803d"/>
+  <path d="m90 430 6 6 11-13" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="131" y="424" fill="#dcfce7" font-family="Segoe UI, Arial, sans-serif" font-size="19" font-weight="600">Corrección implementada</text>
+  <text x="131" y="450" fill="#bbf7d0" font-family="Segoe UI, Arial, sans-serif" font-size="15">Validación del lado del servidor</text>
+  <rect x="502" y="384" width="440" height="92" rx="15" fill="#3b241f" stroke="#fb923c"/>
+  <text x="531" y="424" fill="#fed7aa" font-family="Segoe UI, Arial, sans-serif" font-size="19" font-weight="600">Despliegue en Supabase pendiente</text>
+  <text x="531" y="450" fill="#fdba74" font-family="Segoe UI, Arial, sans-serif" font-size="15">Aplicar SQL y desplegar verify-otp</text>
+  <text x="58" y="538" fill="#93a3b8" font-family="Segoe UI, Arial, sans-serif" font-size="14">La protección de producción requiere aplicar la migración SQL y desplegar la Edge Function actualizada.</text>
+</svg>

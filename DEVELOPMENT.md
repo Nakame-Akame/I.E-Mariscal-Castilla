@@ -123,6 +123,7 @@ El envío de códigos usa `noreply@mariscalcastilla.edu.pe` como remitente. Ante
 supabase secrets set RESEND_API_KEY=re_xxxxxxxxx
 supabase secrets set RESEND_FROM_EMAIL=noreply@mariscalcastilla.edu.pe
 supabase functions deploy send-otp
+supabase functions deploy verify-otp
 ```
 
 No uses `onboarding@resend.dev` ni otro remitente de prueba en producción: Resend solo permite esos remitentes hacia el correo de prueba de la cuenta.

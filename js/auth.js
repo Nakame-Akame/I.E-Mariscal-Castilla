@@ -231,9 +231,9 @@ async function iniciarSesionEstudiante(event) {
   });
 
   boton.disabled = false;
-  autenticacionOtpEnCurso = false;
 
   if (error) {
+    autenticacionOtpEnCurso = false;
     const mensaje = error.message?.toLowerCase() || '';
     console.error('Error de inicio de sesión en Supabase:', error);
     if (mensaje.includes('email not confirmed')) {
@@ -270,6 +270,7 @@ async function iniciarSesionEstudiante(event) {
   }
 
   otpUsuarioPendiente = data.session.user.id;
+  autenticacionOtpEnCurso = false;
   const resultado = await enviarCodigoOtp(otpUsuarioPendiente);
   boton.disabled = false;
   if (!resultado) {
@@ -354,7 +355,6 @@ async function verificarOtp(event) {
     mostrarEstadoLogin(detalle || 'El código no es válido o ha expirado.', 'error');
     return;
   }
-  sessionStorage.setItem('otp_verificado_user_id', otpUsuarioPendiente);
   const { data: sesion } = await supabaseClient.auth.getSession();
   const perfil = await cargarPerfilAcceso(sesion.session.user.email);
   actualizarSesionEstudiante(sesion.session, perfil);
@@ -424,9 +424,14 @@ async function obtenerSolicitudAcceso(correo) {
 }
 
 async function sesionEstaAprobada(session) {
-  return Boolean(
-    session?.user && sessionStorage.getItem('otp_verificado_user_id') === session.user.id
-  );
+  if (!session?.user) return false;
+
+  const { data, error } = await supabaseClient.rpc('otp_session_verified');
+  if (error) {
+    console.error('No se pudo verificar la aprobación OTP de la sesión:', error);
+    return false;
+  }
+  return data === true;
 }
 
 async function enviarEmailAdmision(nombre, correo) {

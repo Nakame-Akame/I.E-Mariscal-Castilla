@@ -231,16 +231,17 @@ Para modificar categorías, editar `areaCategoria` y confirmar que existan los c
 
 La autenticación inicial está implementada en `Auth.js` y utiliza Supabase Auth mediante la librería cargada desde CDN. El acceso está disponible desde el navbar y el menú móvil.
 
-### Flujo actual
+### Flujo de autenticación
 
 1. El visitante ve normalmente el contenido público; los accesos a Áreas Curriculares permanecen ocultos.
 2. Al pulsar `Acceso estudiante`, aparece el formulario de login.
 3. El correo debe terminar en `@mariscalcastilla.edu.pe`.
 4. Supabase valida el correo y la contraseña mediante `signInWithPassword()`.
-5. Con una sesión válida se habilita `page-estudiante` y el acceso a Áreas Curriculares.
-6. Si el correo existe en `estudiantes` y está activo, también se muestran sus datos de estudiante.
-7. La vista muestra las áreas privadas previstas: datos personales, notas y horario.
-8. El cierre de sesión elimina la sesión y oculta nuevamente los accesos restringidos.
+5. Se envía un código OTP de seis dígitos al correo institucional.
+6. La Edge Function `verify-otp` valida el código y registra la aprobación asociada al `session_id` de Supabase durante 12 horas.
+7. `page-estudiante` se habilita solo si la función RPC `otp_session_verified()` confirma esa aprobación.
+8. Las políticas RLS exigen la aprobación OTP para consultar solicitudes, perfiles y contenido restringido; un valor local del navegador no concede acceso.
+9. El cierre de sesión elimina la sesión y oculta nuevamente los accesos restringidos.
 
 ### Configuración requerida
 
@@ -255,6 +256,8 @@ window.SUPABASE_CONFIG = {
 ```
 
 No debe colocarse `service_role` en el navegador. Los usuarios deben existir previamente en Supabase Auth o ser creados/invitados desde un entorno administrativo seguro. La web no tiene registro público.
+
+Para habilitar el acceso, ejecuta `supabase-setup.sql` en el SQL Editor de Supabase y despliega la Edge Function actualizada con `supabase functions deploy verify-otp`. La tabla `otp_verified_sessions` y la función `otp_session_verified()` deben existir antes de utilizar el inicio de sesión. La aprobación OTP vence después de 12 horas; al vencer, el usuario debe volver a autenticarse y verificar un nuevo código.
 
 ### Estado de los datos privados
 
