@@ -44,7 +44,10 @@ window.addEventListener('scroll', () => {
 // MOBILE MENU
 function toggleMenu() {
   const menu = document.getElementById('mobileMenu');
-  menu.classList.toggle('open');
+  const button = document.getElementById('hamburger');
+  const isOpen = menu.classList.toggle('open');
+  button.setAttribute('aria-expanded', String(isOpen));
+  button.setAttribute('aria-label', isOpen ? 'Cerrar menú de navegación' : 'Abrir menú de navegación');
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -52,12 +55,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const enlaceInterno = event.target.closest('a[href="#"]');
     if (enlaceInterno) event.preventDefault();
   });
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && document.getElementById('mobileMenu').classList.contains('open')) {
+      toggleMenu();
+      document.getElementById('hamburger').focus();
+    }
+  });
 
   document.querySelectorAll('.has-submenu').forEach(item => {
     const link = item.querySelector('.dropdown-toggle');
     if (link) {
       link.addEventListener('click', (event) => {
-        if (window.innerWidth <= 900) {
+        if (window.innerWidth <= 1024) {
           event.preventDefault();
           item.classList.toggle('open');
         }
