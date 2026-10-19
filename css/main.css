@@ -265,51 +265,55 @@ body {
   white-space: nowrap;
   box-shadow: 0 10px 20px rgba(182, 59, 43, 0.22);
 }
-.attendance-nav-link {
+.nav-cta:hover {
+  background: linear-gradient(135deg, var(--red-light), var(--red));
+  transform: translateY(-1px);
+  box-shadow: 0 16px 28px rgba(182, 59, 43, 0.3) !important;
+}
+.nav-links a.nav-attendance {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 0.55rem;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.035));
-  color: #fff1c9 !important;
+  gap: 9px;
+  padding: 6px 9px 6px 8px !important;
   border: 1px solid rgba(240, 201, 108, 0.72);
   border-radius: 999px;
-  padding: 6px 9px 6px 8px !important;
-  font-weight: 700 !important;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.035));
+  color: #fff1c9 !important;
+  font-weight: 700;
   white-space: nowrap;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 3px 12px rgba(0, 0, 0, 0.12);
   transition:
     background 0.2s ease,
     border-color 0.2s ease,
     box-shadow 0.2s ease,
-    transform 0.2s ease !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    0 3px 12px rgba(0, 0, 0, 0.12);
+    transform 0.2s ease;
 }
-.attendance-nav-link:hover {
-  background: linear-gradient(135deg, rgba(240, 201, 108, 0.2), rgba(240, 201, 108, 0.08)) !important;
+.nav-links a.nav-attendance:hover,
+.nav-links a.nav-attendance:focus-visible {
   border-color: #ffe19a;
+  background: linear-gradient(135deg, rgba(240, 201, 108, 0.2), rgba(240, 201, 108, 0.08)) !important;
   color: #fff6dc !important;
   transform: translateY(-1px);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.16),
     0 5px 18px rgba(201, 168, 76, 0.2);
 }
-.attendance-nav-link i {
+.nav-attendance i,
+.mobile-menu .mobile-attendance i {
   display: grid;
   width: 27px;
   height: 27px;
+  flex: 0 0 27px;
   place-items: center;
   border-radius: 50%;
   background: rgba(240, 201, 108, 0.14);
   color: #ffe19a;
   font-size: 0.85rem;
 }
-.attendance-nav-link:focus-visible {
-  outline: 2px solid var(--gold-light);
-  outline-offset: 3px;
-}
-.attendance-badge {
+.nav-attendance-badge,
+.mobile-attendance-badge {
   padding: 4px 9px;
   border-radius: 999px;
   background: linear-gradient(180deg, #fff2cc, #ead39a);
@@ -317,37 +321,8 @@ body {
   font-size: 0.65rem;
   font-weight: 800;
   letter-spacing: 0.04em;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
-}
-.nav-cta:hover {
-  background: linear-gradient(135deg, var(--red-light), var(--red));
-  transform: translateY(-1px);
-  box-shadow: 0 16px 28px rgba(182, 59, 43, 0.3) !important;
-}
-.nav-attendance {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  border: 1px solid rgba(242, 216, 157, 0.48);
-  background: rgba(242, 216, 157, 0.12);
-  color: var(--gold-light) !important;
-  white-space: nowrap;
-}
-.nav-links a.nav-attendance:hover,
-.nav-links a.nav-attendance:focus-visible {
-  background: var(--gold-light) !important;
-  color: var(--navy) !important;
-}
-.nav-attendance-badge,
-.mobile-attendance-badge {
-  padding: 2px 6px;
-  border-radius: 999px;
-  background: var(--gold-light);
-  color: var(--navy);
-  font-size: 9px;
-  font-weight: 800;
-  letter-spacing: 0.3px;
   text-transform: uppercase;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 .nav-attendance:hover .nav-attendance-badge,
 .nav-attendance:focus-visible .nav-attendance-badge {
@@ -445,29 +420,29 @@ body {
   border-color: rgba(255, 255, 255, 0.08);
   background: rgba(255, 255, 255, 0.07);
 }
-.mobile-menu .attendance-nav-link {
-  align-self: flex-start;
-  margin: 0.35rem 0;
-  padding: 10px 16px;
-}
 .mobile-menu .profile-nav-link {
   gap: 0.6rem;
 }
 .mobile-menu .mobile-attendance {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 9px;
   margin: 4px 0;
-  border: 1px solid rgba(242, 216, 157, 0.48);
-  background: linear-gradient(110deg, rgba(242, 216, 157, 0.18), rgba(242, 216, 157, 0.08));
-  color: var(--gold-light);
+  border: 1px solid rgba(240, 201, 108, 0.62);
+  border-radius: 999px;
+  background: linear-gradient(110deg, rgba(240, 201, 108, 0.15), rgba(255, 255, 255, 0.04));
+  color: #fff1c9;
   font-weight: 700;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
 }
 .mobile-menu .mobile-attendance:hover,
 .mobile-menu .mobile-attendance:focus-visible {
-  border-color: rgba(242, 216, 157, 0.72);
-  background: var(--gold-light);
-  color: var(--navy);
+  border-color: #ffe19a;
+  background: rgba(240, 201, 108, 0.2);
+  color: #fff6dc;
 }
 .mobile-attendance-badge {
   margin-left: auto;
