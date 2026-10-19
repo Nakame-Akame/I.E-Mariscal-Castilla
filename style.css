@@ -227,6 +227,60 @@ body {
   transition: all 0.3s !important;
   white-space: nowrap;
 }
+.attendance-nav-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.035));
+  color: #fff1c9 !important;
+  border: 1px solid rgba(240, 201, 108, 0.72);
+  border-radius: 999px;
+  padding: 6px 9px 6px 8px !important;
+  font-weight: 700 !important;
+  white-space: nowrap;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 3px 12px rgba(0, 0, 0, 0.12);
+}
+.attendance-nav-link:hover {
+  background: linear-gradient(135deg, rgba(240, 201, 108, 0.2), rgba(240, 201, 108, 0.08)) !important;
+  border-color: #ffe19a;
+  color: #fff6dc !important;
+  transform: translateY(-1px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 5px 18px rgba(201, 168, 76, 0.2);
+}
+.attendance-nav-link i {
+  display: grid;
+  width: 27px;
+  height: 27px;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(240, 201, 108, 0.14);
+  color: #ffe19a;
+  font-size: 0.85rem;
+}
+.attendance-nav-link:focus-visible {
+  outline: 2px solid var(--gold-light);
+  outline-offset: 3px;
+}
+.attendance-badge {
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #fff2cc, #ead39a);
+  color: var(--navy);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
 .nav-cta:hover {
   background: var(--red-light) !important;
   transform: translateY(-1px);
@@ -282,6 +336,11 @@ body {
 }
 .mobile-menu a:hover {
   background: rgba(255, 255, 255, 0.1);
+}
+.mobile-menu .attendance-nav-link {
+  align-self: flex-start;
+  margin: 0.35rem 0;
+  padding: 10px 16px;
 }
 .mobile-menu .profile-nav-link {
   gap: 0.6rem;
